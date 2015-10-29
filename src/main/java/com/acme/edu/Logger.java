@@ -22,6 +22,14 @@ public class Logger {
         print("primitive: " + str);
     }
 
+    public static void log(String str) {
+        print("string: " + str);
+    }
+
+    public static void log(Object o) {
+        print("reference: " + o.toString());
+    }
+
     private static void print(String str) {
         System.out.println(str);
     }
