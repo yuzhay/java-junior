@@ -1,16 +1,17 @@
 package com.acme.edu;
 
 public class Logger {
+
     public static void log(int message) {
-        System.out.println("primitive: " + message);
+        print("primitive: " + message);
     }
 
     public static void log(byte message) {
-        System.out.println("primitive: " + message);
+        print("primitive: " + message);
     }
 
     public static void log(char c) {
-        System.out.println("char: " + c);
+        print("char: " + c);
     }
 
     public static void log(boolean b) {
@@ -18,7 +19,11 @@ public class Logger {
         if (!b) {
             str = "false";
         }
-        System.out.println("primitive: " + str);
+        print("primitive: " + str);
+    }
+
+    private static void print(String str) {
+        System.out.println(str);
     }
 
     public static void main(String[] argv) {
