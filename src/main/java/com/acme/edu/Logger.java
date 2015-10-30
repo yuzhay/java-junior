@@ -46,6 +46,24 @@ public class Logger {
     }
 
     /**
+     * Print byte parameter to log
+     *
+     * @param message print parameter
+     */
+    public static void log(byte message) {
+        if (sum == Integer.MIN_VALUE) {
+            sum = 0;
+        }
+
+        if (message == Byte.MAX_VALUE) {
+            print(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
+            sum = Byte.MAX_VALUE;
+        } else {
+            sum += message;
+        }
+    }
+
+    /**
      * Print char parameter to log
      *
      * @param message print parameter
