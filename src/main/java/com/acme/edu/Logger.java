@@ -143,21 +143,16 @@ public class Logger {
     }
 
     /**
-     * Print int array to log
+     * Print sum of int array to log
      *
      * @param message print parameter
      */
     public static void log(int... message) {
-        StringBuilder sb = new StringBuilder();
-        sb.append('{');
+        int sum = 0;
         for (int i = 0; i < message.length; i++) {
-            sb.append(message[i]);
-            if (i < message.length - 1) {
-                sb.append(", ");
-            }
+            sum += message[i];
         }
-        sb.append('}');
-        print(String.format("%s: %s", Logger.LOG_PRIMITIVES_ARRAY, sb.toString()));
+        print(String.format("%s: %d", Logger.LOG_PRIMITIVE, sum));
     }
 
 
