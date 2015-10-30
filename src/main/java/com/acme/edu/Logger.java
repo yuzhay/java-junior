@@ -113,10 +113,9 @@ public class Logger {
         print(String.format("%s: %s", Logger.LOG_REFERENCE, message));
     }
 
-    //endregion
-
-    //region private methods
-
+    /**
+     * Close log, print result
+     */
     public static void close() {
         if (sum != Integer.MIN_VALUE) {
             print(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
@@ -128,11 +127,17 @@ public class Logger {
             strCounter = 1;
             lastStr = "";
         } else if (strCounter == 1) {
-            if (!lastStr.equals("")) {
+            if (!lastStr.isEmpty()) {
                 print(String.format("%s: %s", Logger.LOG_STRING, lastStr));
             }
             lastStr = "";
         }
+    }
+    //endregion
+
+    //region private methods
+
+    private Logger() {
     }
 
     private static void print(String str) {
