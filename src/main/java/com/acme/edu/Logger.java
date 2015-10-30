@@ -9,6 +9,8 @@ public class Logger {
     public static final String LOG_REFERENCE = "reference";
 
     private static int sum = Integer.MIN_VALUE;
+    private static int strCounter = 1;
+    private static String lastStr = "";
 
     //endregion
 
@@ -33,6 +35,10 @@ public class Logger {
      * @param message print parameter
      */
     public static void log(int message) {
+        if (!lastStr.equals("")) {
+            close();
+        }
+
         if (sum == Integer.MIN_VALUE) {
             sum = 0;
         }
@@ -51,6 +57,10 @@ public class Logger {
      * @param message print parameter
      */
     public static void log(byte message) {
+        if (!lastStr.equals("")) {
+            close();
+        }
+
         if (sum == Integer.MIN_VALUE) {
             sum = 0;
         }
@@ -90,7 +100,18 @@ public class Logger {
         if (sum != Integer.MIN_VALUE) {
             close();
         }
-        print(String.format("%s: %s", Logger.LOG_STRING, message));
+
+        if (lastStr.equals(message)) {
+            strCounter++;
+        } else {
+            strCounter = 1;
+            if (!lastStr.equals("")) {
+                print(String.format("%s: %s", Logger.LOG_STRING, lastStr));
+            }
+        }
+
+
+        lastStr = message;
     }
 
     /**
@@ -107,8 +128,21 @@ public class Logger {
     //region private methods
 
     public static void close() {
-        print(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
-        sum = Integer.MIN_VALUE;
+        if (sum != Integer.MIN_VALUE) {
+            print(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
+            sum = Integer.MIN_VALUE;
+        }
+
+        if (strCounter > 1) {
+            print(String.format("%s: %s (x%d)", Logger.LOG_STRING, lastStr, strCounter));
+            strCounter = 1;
+            lastStr = "";
+        } else if (strCounter == 1) {
+            if (!lastStr.equals("")) {
+                print(String.format("%s: %s", Logger.LOG_STRING, lastStr));
+            }
+            lastStr = "";
+        }
     }
 
     private static void print(String str) {
