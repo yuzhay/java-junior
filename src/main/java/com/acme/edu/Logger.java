@@ -149,8 +149,8 @@ public class Logger {
      */
     public static void log(int... message) {
         int sum = 0;
-        for (int i = 0; i < message.length; i++) {
-            sum += message[i];
+        for (int aMessage : message) {
+            sum += aMessage;
         }
         print(String.format("%s: %d", Logger.LOG_PRIMITIVE, sum));
     }
@@ -163,8 +163,7 @@ public class Logger {
      */
     public static void log(int[][] message) {
         StringBuilder sb = new StringBuilder();
-        sb.append('{');
-        sb.append(System.lineSeparator());
+        sb.append('{').append(System.lineSeparator());
         for (int[] aMessage : message) {
             sb.append('{');
             for (int j = 0; j < aMessage.length; j++) {
@@ -173,8 +172,7 @@ public class Logger {
                     sb.append(", ");
                 }
             }
-            sb.append('}');
-            sb.append(System.lineSeparator());
+            sb.append('}').append(System.lineSeparator());
         }
         sb.append('}');
         print(String.format("%s: %s", Logger.LOG_PRIMITIVES_MATRIX, sb.toString()));
@@ -183,22 +181,18 @@ public class Logger {
     /**
      * Print 4 dimensions int array (matrix) to log
      *
-     * @param message print paramter
+     * @param message print parameter
      */
     public static void log(int[][][][] message) {
         StringBuilder sb = new StringBuilder();
         String sep = System.lineSeparator();
-        sb.append('{');
-        sb.append(System.lineSeparator());
+        sb.append('{').append(sep);
         for (int[][][] aMessage : message) {
-            sb.append('{');
-            sb.append(sep);
+            sb.append('{').append(sep);
             for (int[][] anAMessage : aMessage) {
-                sb.append('{');
-                sb.append(sep);
+                sb.append('{').append(sep);
                 for (int[] anAnAMessage : anAMessage) {
-                    sb.append('{');
-                    sb.append(sep);
+                    sb.append('{').append(sep);
                     int m = 0;
                     while (m < anAnAMessage.length) {
                         sb.append(anAnAMessage[m]);
@@ -207,15 +201,11 @@ public class Logger {
                         }
                         m++;
                     }
-                    sb.append(sep);
-                    sb.append('}');
-                    sb.append(sep);
+                    sb.append(sep).append('}').append(sep);
                 }
-                sb.append('}');
-                sb.append(sep);
+                sb.append('}').append(sep);
             }
-            sb.append('}');
-            sb.append(sep);
+            sb.append('}').append(sep);
         }
         sb.append('}');
         print(String.format("%s: %s", Logger.LOG_PRIMITIVES_MULTIMATRIX, sb.toString()));
@@ -224,13 +214,12 @@ public class Logger {
     /**
      * Print String array to log
      *
-     * @param message print paramter
+     * @param message print parameter
      */
     public static void log(String... message) {
         StringBuilder sb = new StringBuilder();
         for (String aMessage : message) {
-            sb.append(aMessage);
-            sb.append(System.lineSeparator());
+            sb.append(aMessage).append(System.lineSeparator());
         }
         print(String.format("%s: %s", Logger.LOG_STRING, sb.toString()));
     }
