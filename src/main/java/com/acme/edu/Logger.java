@@ -40,7 +40,12 @@ public class Logger {
             print(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
             sum = Integer.MAX_VALUE;
         } else {
-            sum += message;
+            if ((long) message + (long) sum > Integer.MAX_VALUE) {
+                print(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
+                sum = message;
+            } else {
+                sum += message;
+            }
         }
     }
 
@@ -117,7 +122,7 @@ public class Logger {
     }
 
     /**
-     * Close log, print result
+     * Close log in order to print result
      */
     public static void close() {
         if (sum != Integer.MIN_VALUE) {
