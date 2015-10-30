@@ -1,5 +1,8 @@
 package com.acme.edu;
 
+/**
+ * Smart logger.
+ */
 public class Logger {
 
     //region fields
@@ -14,19 +17,6 @@ public class Logger {
 
     //endregion
 
-    //region entry point
-
-    /**
-     * Entry Point
-     *
-     * @param argv class arguments
-     */
-    public static void main(String[] argv) {
-
-    }
-
-    //endregion
-
     //region public methods
 
     /**
@@ -35,7 +25,7 @@ public class Logger {
      * @param message print parameter
      */
     public static void log(int message) {
-        if (!lastStr.equals("")) {
+        if (!lastStr.isEmpty()) {
             close();
         }
 
@@ -57,7 +47,7 @@ public class Logger {
      * @param message print parameter
      */
     public static void log(byte message) {
-        if (!lastStr.equals("")) {
+        if (!lastStr.isEmpty()) {
             close();
         }
 
@@ -105,7 +95,7 @@ public class Logger {
             strCounter++;
         } else {
             strCounter = 1;
-            if (!lastStr.equals("")) {
+            if (!lastStr.isEmpty()) {
                 print(String.format("%s: %s", Logger.LOG_STRING, lastStr));
             }
         }
