@@ -10,7 +10,6 @@ public class Logger {
     public static final String LOG_CHAR = "char";
     public static final String LOG_STRING = "string";
     public static final String LOG_REFERENCE = "reference";
-    public static final String LOG_PRIMITIVES_ARRAY = "primitives array";
     public static final String LOG_PRIMITIVES_MATRIX = "primitives matrix";
     public static final String LOG_PRIMITIVES_MULTIMATRIX = "primitives multimatrix";
 
@@ -19,6 +18,9 @@ public class Logger {
     private static String lastStr = "";
 
     //endregion
+
+    private Logger() {
+    }
 
     //region public methods
 
@@ -227,8 +229,6 @@ public class Logger {
 
     //region private methods
 
-    private Logger() {
-    }
 
     private static void print(String str) {
         System.out.println(str);
