@@ -2,6 +2,7 @@ package com.acme.edu.iteration01;
 
 import com.acme.edu.Logger;
 import com.acme.edu.SysoutCaptureAndAssertionAbility;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,17 +16,23 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     }
     //endregion
 
+    @After
+    public void tearDown() {
+        resetOut();
+    }
+
     @Test
     public void shouldLogInteger() throws IOException {
         //region when
         Logger.log(1);
         Logger.log(0);
         Logger.log(-1);
+        Logger.close();
         //endregion
 
         //region then
         assertSysoutContains("primitive: ");
-        assertSysoutEquals("primitive: 1" + System.lineSeparator() + "primitive: 0" + System.lineSeparator() + "primitive: -1" + System.lineSeparator());
+        assertSysoutEquals("primitive: 0" + System.lineSeparator());
         //endregion
     }
 
@@ -35,13 +42,12 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         Logger.log((byte) 1);
         Logger.log((byte) 0);
         Logger.log((byte) -1);
+        Logger.close();
         //endregion
 
         //region then
         assertSysoutContains("primitive: ");
-        assertSysoutContains("1");
         assertSysoutContains("0");
-        assertSysoutContains("-1");
         //endregion
     }
 

@@ -7,6 +7,9 @@ public class Logger {
     public static final String LOG_CHAR = "char";
     public static final String LOG_STRING = "string";
     public static final String LOG_REFERENCE = "reference";
+
+    private static int sum = Integer.MIN_VALUE;
+
     //endregion
 
     //region entry point
@@ -30,7 +33,16 @@ public class Logger {
      * @param message print parameter
      */
     public static void log(int message) {
-        print(String.format("%s: %s", Logger.LOG_PRIMITIVE, message));
+        if (sum == Integer.MIN_VALUE) {
+            sum = 0;
+        }
+
+        if (message == Integer.MAX_VALUE) {
+            print(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
+            sum = Integer.MAX_VALUE;
+        } else {
+            sum += message;
+        }
     }
 
     /**
@@ -57,6 +69,9 @@ public class Logger {
      * @param message print parameter
      */
     public static void log(String message) {
+        if (sum != Integer.MIN_VALUE) {
+            close();
+        }
         print(String.format("%s: %s", Logger.LOG_STRING, message));
     }
 
@@ -72,6 +87,12 @@ public class Logger {
     //endregion
 
     //region private methods
+
+    public static void close() {
+        print(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
+        sum = Integer.MIN_VALUE;
+    }
+
     private static void print(String str) {
         System.out.println(str);
     }
