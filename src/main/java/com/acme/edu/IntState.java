@@ -16,6 +16,12 @@ public class IntState implements State {
     //endregion
 
     //region constructor
+
+    /**
+     * Creates new IntState object
+     *
+     * @param printer is used to format printing int
+     */
     public IntState(Printer printer) {
         this.printer = printer;
     }

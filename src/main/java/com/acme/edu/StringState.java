@@ -13,6 +13,12 @@ public class StringState implements State {
     //endregion
 
     //region constructor
+
+    /**
+     * Creates new StringState object
+     *
+     * @param printer is used to format printing string
+     */
     public StringState(Printer printer) {
         this.printer = printer;
     }

@@ -10,6 +10,12 @@ public class BoolState implements State {
     //endregion
 
     //region constructor
+
+    /**
+     * Creates new BoolState object
+     *
+     * @param printer is used to format printing bool
+     */
     public BoolState(Printer printer) {
         this.printer = printer;
     }

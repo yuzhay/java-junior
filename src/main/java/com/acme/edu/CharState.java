@@ -10,6 +10,12 @@ public class CharState implements State {
     //endregion
 
     //region constructor
+
+    /**
+     * Creates new CharState object
+     *
+     * @param printer is used to format printing char
+     */
     public CharState(Printer printer) {
         this.printer = printer;
     }

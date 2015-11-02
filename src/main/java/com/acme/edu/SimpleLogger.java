@@ -16,6 +16,12 @@ public class SimpleLogger {
     //endregion
 
     //region constructor
+
+    /**
+     * Creates SimpleLogger instance
+     *
+     * @param printer Printer class will be used to format printing result.
+     */
     public SimpleLogger(Printer printer) {
         this.intState = new IntState(printer);
         this.stringState = new StringState(printer);
