@@ -102,7 +102,6 @@ public class Logger {
             }
         }
 
-
         lastStr = message;
     }
 
@@ -156,20 +155,8 @@ public class Logger {
      * @param messages print parameter
      */
     public static void log(int[][] messages) {
-        StringBuilder sb = new StringBuilder();
-        sb.append('{').append(System.lineSeparator());
-        for (int[] message : messages) {
-            sb.append('{');
-            for (int j = 0; j < message.length; j++) {
-                sb.append(message[j]);
-                if (j < message.length - 1) {
-                    sb.append(", ");
-                }
-            }
-            sb.append('}').append(System.lineSeparator());
-        }
-        sb.append('}');
-        print(String.format("%s: %s", Logger.LOG_PRIMITIVES_MATRIX, sb.toString()));
+        String result = log2d(messages);
+        print(String.format("%s: %s", Logger.LOG_PRIMITIVES_MATRIX, result));
     }
 
     /**
@@ -185,19 +172,9 @@ public class Logger {
             buffer.append('{').append(sep);
             for (int[][] bMessages : aMessages) {
                 buffer.append('{').append(sep);
-                for (int[] cMessages : bMessages) {
-                    buffer.append('{').append(sep);
-                    int messageIndex = 0;
-                    while (messageIndex < cMessages.length) {
-                        buffer.append(cMessages[messageIndex]);
-                        if (messageIndex < cMessages.length - 1) {
-                            buffer.append(", ");
-                        }
-                        messageIndex++;
-                    }
-                    buffer.append(sep).append('}').append(sep);
-                }
-                buffer.append('}').append(sep);
+                String result = log2d(bMessages);
+                buffer.append(result);
+                buffer.append(sep).append('}').append(sep);
             }
             buffer.append('}').append(sep);
         }
@@ -233,6 +210,23 @@ public class Logger {
         if (sum == null) {
             sum = 0;
         }
+    }
+
+    private static String log2d(int[][] messages) {
+        StringBuilder buffer = new StringBuilder();
+        buffer.append('{').append(System.lineSeparator());
+        for (int[] aMessage : messages) {
+            buffer.append('{');
+            for (int j = 0; j < aMessage.length; j++) {
+                buffer.append(aMessage[j]);
+                if (j < aMessage.length - 1) {
+                    buffer.append(", ");
+                }
+            }
+            buffer.append('}').append(System.lineSeparator());
+        }
+        buffer.append('}');
+        return buffer.toString();
     }
 
     private static void print(String str) {

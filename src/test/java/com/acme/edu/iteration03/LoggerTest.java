@@ -63,7 +63,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         assertSysoutEquals(
                 "primitives multimatrix: {" + sep +
                         "{" + sep + "{" + sep + "{" + sep +
-                        "0" + sep +
+                        "{0}" + sep +
                         "}" + sep + "}" + sep + "}" + sep +
                         "}" + sep
         );
