@@ -20,7 +20,7 @@ public class Logger {
 
     private static int strCounter = 1;
     private static String lastStr = "";
-
+    private static LogState state = LogState.START;
     //endregion
 
     private Logger() {
@@ -37,15 +37,45 @@ public class Logger {
         prepareValuesAndClosePrimitiveLogIfNeed();
 
         if (message == Integer.MAX_VALUE) {
-            print(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
-            sum = Integer.MAX_VALUE;
+            state = LogState.INT_PRINT_MAXVALUE;
+            statePrint(message);
+            return;
+        }
+
+        if (isOverflow(message)) {
+            state = LogState.INT_PRINT_OVERFLOW;
         } else {
-            if ((long) message + (long) sum > Integer.MAX_VALUE) {
+            state = LogState.INT_PRINT_SUM;
+        }
+
+        statePrint(message);
+    }
+
+    private static boolean isOverflow(int message) {
+        return message + (long) sum > Integer.MAX_VALUE;
+    }
+
+    private static void statePrint(int message) {
+        switch (state) {
+            case START: /*Do nothing*/
+                break;
+            case INT_PRINT_SUM:
+                sum += message;
+                break;
+            case INT_PRINT_MAXVALUE:
+                print(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
+                sum = Integer.MAX_VALUE;
+                break;
+            case STRING_PRINT_COUNT:
+                break;
+            case STRING_PRINT:
+                break;
+            case INT_PRINT_OVERFLOW:
                 print(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
                 sum = message;
-            } else {
-                sum += message;
-            }
+                break;
+            case CLOSE:
+                break;
         }
     }
 
@@ -231,6 +261,10 @@ public class Logger {
 
     private static void print(String str) {
         System.out.println(str);
+    }
+
+    private enum LogState {
+        START, INT_PRINT_SUM, INT_PRINT_MAXVALUE, STRING_PRINT_COUNT, STRING_PRINT, INT_PRINT_OVERFLOW, CLOSE
     }
     //endregion
 }
