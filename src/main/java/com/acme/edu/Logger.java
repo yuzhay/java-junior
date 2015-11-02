@@ -231,11 +231,11 @@ public class Logger {
                     formatPrint(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
                     sum = (int) Byte.MAX_VALUE;
                     break;
-                /*case CHAR_PRINT:
-                    formatPrint(String.format("%s: %s", Logger.LOG_CHAR, message));
-                    break;*/
+                case CHAR_PRINT:
+                    break;
                 case CLOSE:
                     break;
+                default:
             }
         }
     }

@@ -30,7 +30,7 @@ public class IntState implements State {
      */
     @Override
     public void log(String msg) {
-        int value = Integer.valueOf(msg);
+        int value = Integer.parseInt(msg);
 
         if (sum == null) {
             sum = 0;
