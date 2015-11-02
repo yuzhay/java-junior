@@ -13,7 +13,11 @@ public class Logger {
     public static final String LOG_PRIMITIVES_MATRIX = "primitives matrix";
     public static final String LOG_PRIMITIVES_MULTIMATRIX = "primitives multimatrix";
 
-    private static int sum = Integer.MIN_VALUE;
+    /**
+     * Integer is used to determine unset state
+     */
+    private static Integer sum = null;
+
     private static int strCounter = 1;
     private static String lastStr = "";
 
@@ -34,7 +38,7 @@ public class Logger {
             close();
         }
 
-        if (sum == Integer.MIN_VALUE) {
+        if (sum == null) {
             sum = 0;
         }
 
@@ -61,13 +65,13 @@ public class Logger {
             close();
         }
 
-        if (sum == Integer.MIN_VALUE) {
+        if (sum == null) {
             sum = 0;
         }
 
         if (message == Byte.MAX_VALUE) {
             print(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
-            sum = Byte.MAX_VALUE;
+            sum = (int) Byte.MAX_VALUE;
         } else {
             sum += message;
         }
@@ -97,7 +101,7 @@ public class Logger {
      * @param message print parameter
      */
     public static void log(String message) {
-        if (sum != Integer.MIN_VALUE) {
+        if (sum != null) {
             close();
         }
 
@@ -127,9 +131,9 @@ public class Logger {
      * Close log in order to print result
      */
     public static void close() {
-        if (sum != Integer.MIN_VALUE) {
+        if (sum != null) {
             print(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
-            sum = Integer.MIN_VALUE;
+            sum = null;
         }
 
         if (strCounter > 1) {
@@ -147,12 +151,12 @@ public class Logger {
     /**
      * Print sum of int array to log
      *
-     * @param message print parameter
+     * @param messages print parameter
      */
-    public static void log(int... message) {
+    public static void log(int... messages) {
         int sum = 0;
-        for (int aMessage : message) {
-            sum += aMessage;
+        for (int i = 0; i < messages.length; i++) {
+            sum += messages[i];
         }
         print(String.format("%s: %d", Logger.LOG_PRIMITIVE, sum));
     }
@@ -161,16 +165,16 @@ public class Logger {
     /**
      * Print two dimensions int array (matrix) to log
      *
-     * @param message print parameter
+     * @param messages print parameter
      */
-    public static void log(int[][] message) {
+    public static void log(int[][] messages) {
         StringBuilder sb = new StringBuilder();
         sb.append('{').append(System.lineSeparator());
-        for (int[] aMessage : message) {
+        for (int[] message : messages) {
             sb.append('{');
-            for (int j = 0; j < aMessage.length; j++) {
-                sb.append(aMessage[j]);
-                if (j < aMessage.length - 1) {
+            for (int j = 0; j < message.length; j++) {
+                sb.append(message[j]);
+                if (j < message.length - 1) {
                     sb.append(", ");
                 }
             }
@@ -183,47 +187,47 @@ public class Logger {
     /**
      * Print 4 dimensions int array (matrix) to log
      *
-     * @param message print parameter
+     * @param messages print parameter
      */
-    public static void log(int[][][][] message) {
-        StringBuilder sb = new StringBuilder();
+    public static void log(int[][][][] messages) {
+        StringBuilder buffer = new StringBuilder();
         String sep = System.lineSeparator();
-        sb.append('{').append(sep);
-        for (int[][][] aMessage : message) {
-            sb.append('{').append(sep);
-            for (int[][] anAMessage : aMessage) {
-                sb.append('{').append(sep);
-                for (int[] anAnAMessage : anAMessage) {
-                    sb.append('{').append(sep);
-                    int m = 0;
-                    while (m < anAnAMessage.length) {
-                        sb.append(anAnAMessage[m]);
-                        if (m < anAnAMessage.length - 1) {
-                            sb.append(", ");
+        buffer.append('{').append(sep);
+        for (int[][][] aMessages : messages) {
+            buffer.append('{').append(sep);
+            for (int[][] bMessages : aMessages) {
+                buffer.append('{').append(sep);
+                for (int[] cMessages : bMessages) {
+                    buffer.append('{').append(sep);
+                    int messageIndex = 0;
+                    while (messageIndex < cMessages.length) {
+                        buffer.append(cMessages[messageIndex]);
+                        if (messageIndex < cMessages.length - 1) {
+                            buffer.append(", ");
                         }
-                        m++;
+                        messageIndex++;
                     }
-                    sb.append(sep).append('}').append(sep);
+                    buffer.append(sep).append('}').append(sep);
                 }
-                sb.append('}').append(sep);
+                buffer.append('}').append(sep);
             }
-            sb.append('}').append(sep);
+            buffer.append('}').append(sep);
         }
-        sb.append('}');
-        print(String.format("%s: %s", Logger.LOG_PRIMITIVES_MULTIMATRIX, sb.toString()));
+        buffer.append('}');
+        print(String.format("%s: %s", Logger.LOG_PRIMITIVES_MULTIMATRIX, buffer.toString()));
     }
 
     /**
      * Print String array to log
      *
-     * @param message print parameter
+     * @param messages print parameter
      */
-    public static void log(String... message) {
-        StringBuilder sb = new StringBuilder();
-        for (String aMessage : message) {
-            sb.append(aMessage).append(System.lineSeparator());
+    public static void log(String... messages) {
+        StringBuilder buffer = new StringBuilder();
+        for (String message : messages) {
+            buffer.append(message).append(System.lineSeparator());
         }
-        print(String.format("%s: %s", Logger.LOG_STRING, sb.toString()));
+        print(String.format("%s: %s", Logger.LOG_STRING, buffer.toString()));
     }
     //endregion
 
