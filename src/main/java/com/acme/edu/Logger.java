@@ -34,13 +34,7 @@ public class Logger {
      * @param message print parameter
      */
     public static void log(int message) {
-        if (!lastStr.isEmpty()) {
-            close();
-        }
-
-        if (sum == null) {
-            sum = 0;
-        }
+        prepareValuesAndClosePrimitiveLogIfNeed();
 
         if (message == Integer.MAX_VALUE) {
             print(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
@@ -61,13 +55,7 @@ public class Logger {
      * @param message print parameter
      */
     public static void log(byte message) {
-        if (!lastStr.isEmpty()) {
-            close();
-        }
-
-        if (sum == null) {
-            sum = 0;
-        }
+        prepareValuesAndClosePrimitiveLogIfNeed();
 
         if (message == Byte.MAX_VALUE) {
             print(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
@@ -233,6 +221,19 @@ public class Logger {
 
     //region private methods
 
+    private static void prepareValuesAndClosePrimitiveLogIfNeed() {
+        if (lastStr == null) {
+            lastStr = "";
+        }
+
+        if (!lastStr.isEmpty()) {
+            close();
+        }
+
+        if (sum == null) {
+            sum = 0;
+        }
+    }
 
     private static void print(String str) {
         System.out.println(str);
