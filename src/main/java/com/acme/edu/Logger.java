@@ -38,7 +38,7 @@ public class Logger {
 
         if (message == Integer.MAX_VALUE) {
             state = LogState.INT_PRINT_MAXVALUE;
-            statePrint(message);
+            state.print(message);
             return;
         }
 
@@ -48,35 +48,7 @@ public class Logger {
             state = LogState.INT_PRINT_SUM;
         }
 
-        statePrint(message);
-    }
-
-    private static boolean isOverflow(int message) {
-        return message + (long) sum > Integer.MAX_VALUE;
-    }
-
-    private static void statePrint(int message) {
-        switch (state) {
-            case START: /*Do nothing*/
-                break;
-            case INT_PRINT_SUM:
-                sum += message;
-                break;
-            case INT_PRINT_MAXVALUE:
-                print(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
-                sum = Integer.MAX_VALUE;
-                break;
-            case STRING_PRINT_COUNT:
-                break;
-            case STRING_PRINT:
-                break;
-            case INT_PRINT_OVERFLOW:
-                print(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
-                sum = message;
-                break;
-            case CLOSE:
-                break;
-        }
+        state.print(message);
     }
 
     /**
@@ -88,11 +60,12 @@ public class Logger {
         prepareValuesAndClosePrimitiveLogIfNeed();
 
         if (message == Byte.MAX_VALUE) {
-            print(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
-            sum = (int) Byte.MAX_VALUE;
+            state = LogState.BYTE_PRINT_MAXVALUE;
         } else {
-            sum += message;
+            state = LogState.INT_PRINT_SUM;
         }
+
+        state.print(message);
     }
 
     /**
@@ -101,7 +74,7 @@ public class Logger {
      * @param message print parameter
      */
     public static void log(char message) {
-        print(String.format("%s: %s", Logger.LOG_CHAR, message));
+        formatPrint(String.format("%s: %s", Logger.LOG_CHAR, message));
     }
 
     /**
@@ -110,7 +83,7 @@ public class Logger {
      * @param message print parameter
      */
     public static void log(boolean message) {
-        print(String.format("%s: %s", Logger.LOG_PRIMITIVE, message));
+        formatPrint(String.format("%s: %s", Logger.LOG_PRIMITIVE, message));
     }
 
     /**
@@ -128,7 +101,7 @@ public class Logger {
         } else {
             strCounter = 1;
             if (!lastStr.isEmpty()) {
-                print(String.format("%s: %s", Logger.LOG_STRING, lastStr));
+                formatPrint(String.format("%s: %s", Logger.LOG_STRING, lastStr));
             }
         }
 
@@ -141,7 +114,7 @@ public class Logger {
      * @param message print parameter
      */
     public static void log(Object message) {
-        print(String.format("%s: %s", Logger.LOG_REFERENCE, message));
+        formatPrint(String.format("%s: %s", Logger.LOG_REFERENCE, message));
     }
 
     /**
@@ -149,17 +122,17 @@ public class Logger {
      */
     public static void close() {
         if (sum != null) {
-            print(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
+            formatPrint(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
             sum = null;
         }
 
         if (strCounter > 1) {
-            print(String.format("%s: %s (x%d)", Logger.LOG_STRING, lastStr, strCounter));
+            formatPrint(String.format("%s: %s (x%d)", Logger.LOG_STRING, lastStr, strCounter));
             strCounter = 1;
             lastStr = "";
         } else if (strCounter == 1) {
             if (!lastStr.isEmpty()) {
-                print(String.format("%s: %s", Logger.LOG_STRING, lastStr));
+                formatPrint(String.format("%s: %s", Logger.LOG_STRING, lastStr));
             }
             lastStr = "";
         }
@@ -175,7 +148,7 @@ public class Logger {
         for (int i = 0; i < messages.length; i++) {
             sum += messages[i];
         }
-        print(String.format("%s: %d", Logger.LOG_PRIMITIVE, sum));
+        formatPrint(String.format("%s: %d", Logger.LOG_PRIMITIVE, sum));
     }
 
 
@@ -186,7 +159,7 @@ public class Logger {
      */
     public static void log(int[][] messages) {
         String result = log2d(messages);
-        print(String.format("%s: %s", Logger.LOG_PRIMITIVES_MATRIX, result));
+        formatPrint(String.format("%s: %s", Logger.LOG_PRIMITIVES_MATRIX, result));
     }
 
     /**
@@ -209,7 +182,7 @@ public class Logger {
             buffer.append('}').append(sep);
         }
         buffer.append('}');
-        print(String.format("%s: %s", Logger.LOG_PRIMITIVES_MULTIMATRIX, buffer.toString()));
+        formatPrint(String.format("%s: %s", Logger.LOG_PRIMITIVES_MULTIMATRIX, buffer.toString()));
     }
 
     /**
@@ -222,11 +195,50 @@ public class Logger {
         for (String message : messages) {
             buffer.append(message).append(System.lineSeparator());
         }
-        print(String.format("%s: %s", Logger.LOG_STRING, buffer.toString()));
+        formatPrint(String.format("%s: %s", Logger.LOG_STRING, buffer.toString()));
     }
     //endregion
 
     //region private methods
+    private enum LogState {
+        START,
+        INT_PRINT_SUM, INT_PRINT_MAXVALUE, INT_PRINT_OVERFLOW,
+        STRING_PRINT_COUNT, STRING_PRINT,
+        CHAR_PRINT,
+        BYTE_PRINT_MAXVALUE,
+        CLOSE;
+
+        public void print(int message) {
+            switch (state) {
+                case START: /*Do nothing*/
+                    break;
+                case INT_PRINT_SUM:
+                    sum += message;
+                    break;
+                case INT_PRINT_MAXVALUE:
+                    formatPrint(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
+                    sum = Integer.MAX_VALUE;
+                    break;
+                case STRING_PRINT_COUNT:
+                    break;
+                case STRING_PRINT:
+                    break;
+                case INT_PRINT_OVERFLOW:
+                    formatPrint(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
+                    sum = message;
+                    break;
+                case BYTE_PRINT_MAXVALUE:
+                    formatPrint(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
+                    sum = (int) Byte.MAX_VALUE;
+                    break;
+                /*case CHAR_PRINT:
+                    formatPrint(String.format("%s: %s", Logger.LOG_CHAR, message));
+                    break;*/
+                case CLOSE:
+                    break;
+            }
+        }
+    }
 
     private static void prepareValuesAndClosePrimitiveLogIfNeed() {
         if (lastStr == null) {
@@ -259,12 +271,13 @@ public class Logger {
         return buffer.toString();
     }
 
-    private static void print(String str) {
+    private static void formatPrint(String str) {
         System.out.println(str);
     }
 
-    private enum LogState {
-        START, INT_PRINT_SUM, INT_PRINT_MAXVALUE, STRING_PRINT_COUNT, STRING_PRINT, INT_PRINT_OVERFLOW, CLOSE
+    private static boolean isOverflow(int message) {
+        return message + (long) sum > Integer.MAX_VALUE;
     }
+
     //endregion
 }
