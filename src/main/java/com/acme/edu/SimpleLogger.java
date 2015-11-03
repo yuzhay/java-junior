@@ -69,6 +69,62 @@ public class SimpleLogger {
         changeState(boolState, String.valueOf(message));
     }
 
+
+    /**
+     * Print int array parameter to log
+     *
+     * @param messages print parameter
+     */
+    public void log(int... messages) {
+        long sum = 0;
+        for (int i = 0; i < messages.length; i++) {
+            sum += messages[i];
+        }
+
+        changeState(intState, String.valueOf(sum));
+        intState.flush();
+    }
+
+    /**
+     * Print 2d int array parameter to log
+     *
+     * @param messages print parameter
+     */
+    public void log(int[]... messages) {
+        long sum = get2dSum(messages);
+        changeState(intState, String.valueOf(sum));
+        intState.flush();
+    }
+
+
+    /**
+     * Print 4d int array parameter to log
+     *
+     * @param messages print parameter
+     */
+    public void log(int[][][]... messages) {
+        long sum = 0;
+        for (int i = 0; i < messages.length; i++) {
+            for (int j = 0; j < messages[i].length; j++) {
+                sum += get2dSum(messages[i][j]);
+            }
+        }
+        changeState(intState, String.valueOf(sum));
+        intState.flush();
+    }
+
+    /**
+     * Print string array parameter to log
+     *
+     * @param messages print parameter
+     */
+    public void log(String... messages) {
+        for (int i = 0; i < messages.length; i++) {
+            changeState(stringState, String.valueOf(messages[i]));
+        }
+        stringState.flush();
+    }
+
     /**
      * Close log in order to print result
      */
@@ -87,5 +143,14 @@ public class SimpleLogger {
         curState.log(message);
     }
 
+    private long get2dSum(int[][] messages) {
+        long sum = 0;
+        for (int i = 0; i < messages.length; i++) {
+            for (int j = 0; j < messages[i].length; j++) {
+                sum += messages[i][j];
+            }
+        }
+        return sum;
+    }
     //endregion
 }
