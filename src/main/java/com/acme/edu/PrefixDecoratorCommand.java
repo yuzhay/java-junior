@@ -30,12 +30,16 @@ public class PrefixDecoratorCommand implements DecoratorCommand {
     /**
      * Decorates input string by prefix
      *
-     * @param args   array of string
+     * @param args array of string
      */
     @Override
     public void decorate(String... args) {
         String joinedStr = String.join(" ", args);
-        printer.log(prefix + joinedStr);
+        if (args.length > 0) {
+            printer.log(prefix + joinedStr);
+        } else {
+            printer.log(prefix);
+        }
     }
     //endregion
 }

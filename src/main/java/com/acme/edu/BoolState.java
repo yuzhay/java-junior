@@ -5,10 +5,6 @@ package com.acme.edu;
  * Created by Yuriy on 02.11.2015.
  */
 public class BoolState implements State {
-    //region private fields
-
-    //endregion
-
     //region constructor
 
     /**
@@ -29,7 +25,6 @@ public class BoolState implements State {
     @Override
     public void log(String msg, DecoratorCommand decor) {
         decor.decorate(msg);
-        //printer.log(String.format("%s: %s", Logger.LOG_PRIMITIVE, msg));
     }
 
     /**

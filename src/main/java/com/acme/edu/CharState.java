@@ -5,9 +5,6 @@ package com.acme.edu;
  * Created by Yuriy on 02.11.2015.
  */
 public class CharState implements State {
-    //region private fields
-    //endregion
-
     //region constructor
 
     /**
