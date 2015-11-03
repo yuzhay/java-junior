@@ -6,18 +6,14 @@ package com.acme.edu;
  */
 public class CharState implements State {
     //region private fields
-    private final Printer printer;
     //endregion
 
     //region constructor
 
     /**
      * Creates new CharState object
-     *
-     * @param printer is used to format printing char
      */
-    public CharState(Printer printer) {
-        this.printer = printer;
+    public CharState() {
     }
     //endregion
 
@@ -29,15 +25,15 @@ public class CharState implements State {
      * @param msg print parameter
      */
     @Override
-    public void log(String msg) {
-        printer.log(String.format("%s: %s", Logger.LOG_CHAR, msg));
+    public void log(String msg, DecoratorCommand decor) {
+        decor.decorate(msg);
     }
 
     /**
      * Flush log in order to print buffer result
      */
     @Override
-    public void flush() {
+    public void flush(DecoratorCommand decor) {
         /*Do nothing*/
     }
 

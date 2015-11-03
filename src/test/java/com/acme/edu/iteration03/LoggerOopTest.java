@@ -20,7 +20,7 @@ public class LoggerOopTest implements SysoutCaptureAndAssertionAbility {
         tearDown();
         captureSysout();
 
-        sp = new SimpleLogger(new SimplePrinter());
+        sp = new SimpleLogger();
     }
     //endregion
 

@@ -7,7 +7,6 @@ package com.acme.edu;
 public class StringState implements State {
 
     //region private fields
-    private Printer printer;
     private String lastStr = "";
     private int strCounter = 1;
     //endregion
@@ -16,11 +15,9 @@ public class StringState implements State {
 
     /**
      * Creates new StringState object
-     *
-     * @param printer is used to format printing string
      */
-    public StringState(Printer printer) {
-        this.printer = printer;
+    public StringState() {
+
     }
     //endregion
 
@@ -32,7 +29,7 @@ public class StringState implements State {
      * @param message print parameter
      */
     @Override
-    public void log(String message) {
+    public void log(String message, DecoratorCommand decor) {
 
         if (lastStr == null) {
             lastStr = "";
@@ -43,7 +40,7 @@ public class StringState implements State {
         } else {
             strCounter = 1;
             if (!lastStr.isEmpty()) {
-                printer.log(String.format("%s: %s", Logger.LOG_STRING, lastStr));
+                decor.decorate(lastStr);
             }
         }
 
@@ -54,14 +51,14 @@ public class StringState implements State {
      * Flush log in order to print buffer result
      */
     @Override
-    public void flush() {
+    public void flush(DecoratorCommand decor) {
         if (strCounter > 1) {
-            printer.log(String.format("%s: %s (x%d)", Logger.LOG_STRING, lastStr, strCounter));
+            decor.decorate(lastStr + String.format(" (x%d)", strCounter));
             strCounter = 1;
             lastStr = "";
         } else if (strCounter == 1) {
             if (!lastStr.isEmpty()) {
-                printer.log(String.format("%s: %s", Logger.LOG_STRING, lastStr));
+                decor.decorate(lastStr);
             }
             lastStr = "";
         }

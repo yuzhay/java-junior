@@ -7,7 +7,6 @@ package com.acme.edu;
 public class IntState implements State {
 
     //region private fields
-    private Printer printer;
 
     /**
      * Integer is used to determine unset state
@@ -19,11 +18,9 @@ public class IntState implements State {
 
     /**
      * Creates new IntState object
-     *
-     * @param printer is used to format printing int
      */
-    public IntState(Printer printer) {
-        this.printer = printer;
+    public IntState() {
+
     }
     //endregion
 
@@ -35,7 +32,7 @@ public class IntState implements State {
      * @param msg print parameter
      */
     @Override
-    public void log(String msg) {
+    public void log(String msg, DecoratorCommand decor) {
         int value = Integer.parseInt(msg);
 
         if (sum == null) {
@@ -43,13 +40,13 @@ public class IntState implements State {
         }
 
         if (value == Integer.MAX_VALUE) {
-            printer.log(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
+            decor.decorate(sum.toString());
             sum = Integer.MAX_VALUE;
             return;
         }
 
         if (isOverflow(value)) {
-            printer.log(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
+            decor.decorate(sum.toString());
             sum = value;
         } else {
             sum += value;
@@ -60,9 +57,9 @@ public class IntState implements State {
      * Flush log in order to print buffer result
      */
     @Override
-    public void flush() {
+    public void flush(DecoratorCommand decor) {
         if (sum != null) {
-            printer.log(String.format("%s: %s", Logger.LOG_PRIMITIVE, sum));
+            decor.decorate(sum.toString());
             sum = null;
         }
     }

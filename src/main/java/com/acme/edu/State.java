@@ -11,10 +11,10 @@ public interface State {
      *
      * @param msg print parameter
      */
-    void log(String msg);
+    void log(String msg, DecoratorCommand decor);
 
     /**
      * Flush in order to print buffer result to log
      */
-    void flush();
+    void flush(DecoratorCommand decor);
 }

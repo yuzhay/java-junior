@@ -1,24 +1,26 @@
 package com.acme.edu;
 
 /**
- * FormatDecorator prints string using format
+ * FormatDecoratorCommand prints string using format
  * Created by Yuriy on 03.11.2015.
  */
-public class FormatDecorator implements Decorator {
+public class FormatDecoratorCommand implements DecoratorCommand {
 
     //region private fields
     private final Printer printer;
+    private final String format;
     //endregion
 
     //region constructor
 
     /**
-     * Creates instance of PrefixDecorator
+     * Creates instance of PrefixDecoratorCommand
      *
      * @param printer instance of Printer which will be used to log information
      */
-    public FormatDecorator(Printer printer) {
+    public FormatDecoratorCommand(Printer printer, String format) {
         this.printer = printer;
+        this.format = format;
     }
     //endregion
 
@@ -28,11 +30,10 @@ public class FormatDecorator implements Decorator {
     /**
      * Format input string by passed format rules
      *
-     * @param format will be appended to string
-     * @param args   array of string
+     * @param args array of string
      */
     @Override
-    public void decorate(String format, String... args) {
+    public void decorate(String... args) {
         printer.log(String.format(format, args));
     }
     //endregion

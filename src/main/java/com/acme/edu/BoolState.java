@@ -6,18 +6,16 @@ package com.acme.edu;
  */
 public class BoolState implements State {
     //region private fields
-    private final Printer printer;
+
     //endregion
 
     //region constructor
 
     /**
      * Creates new BoolState object
-     *
-     * @param printer is used to format printing bool
      */
-    public BoolState(Printer printer) {
-        this.printer = printer;
+    public BoolState() {
+
     }
     //endregion
 
@@ -29,15 +27,16 @@ public class BoolState implements State {
      * @param msg print parameter
      */
     @Override
-    public void log(String msg) {
-        printer.log(String.format("%s: %s", Logger.LOG_PRIMITIVE, msg));
+    public void log(String msg, DecoratorCommand decor) {
+        decor.decorate(msg);
+        //printer.log(String.format("%s: %s", Logger.LOG_PRIMITIVE, msg));
     }
 
     /**
      * Flush log in order to print buffer result
      */
     @Override
-    public void flush() {
+    public void flush(DecoratorCommand decor) {
         /*Do nothing*/
     }
     //endregion

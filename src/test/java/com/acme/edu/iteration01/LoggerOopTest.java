@@ -1,9 +1,6 @@
 package com.acme.edu.iteration01;
 
-import com.acme.edu.Logger;
-import com.acme.edu.SimpleLogger;
-import com.acme.edu.SimplePrinter;
-import com.acme.edu.SysoutCaptureAndAssertionAbility;
+import com.acme.edu.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +17,7 @@ public class LoggerOopTest implements SysoutCaptureAndAssertionAbility {
         tearDown();
         captureSysout();
 
-        sp = new SimpleLogger(new SimplePrinter());
+        sp = new SimpleLogger();
     }
     //endregion
 

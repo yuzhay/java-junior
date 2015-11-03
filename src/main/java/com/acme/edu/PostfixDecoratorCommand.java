@@ -1,24 +1,26 @@
 package com.acme.edu;
 
 /**
- * PrefixDecorator prints string with specified prefix
+ * PostfixDecoratorCommand prints string with specified prefix
  * Created by Yuriy on 03.11.2015.
  */
-public class PrefixDecorator implements Decorator {
+public class PostfixDecoratorCommand implements DecoratorCommand {
 
     //region private fields
     private final Printer printer;
+    private final String postfix;
     //endregion
 
     //region constructor
 
     /**
-     * Creates instance of PrefixDecorator
+     * Creates instance of PrefixDecoratorCommand
      *
      * @param printer instance of Printer which will be used to log information
      */
-    public PrefixDecorator(Printer printer) {
+    public PostfixDecoratorCommand(Printer printer, String postfix) {
         this.printer = printer;
+        this.postfix = postfix;
     }
     //endregion
 
@@ -28,13 +30,12 @@ public class PrefixDecorator implements Decorator {
     /**
      * Decorates input string by prefix
      *
-     * @param prefix will be appended to string
-     * @param args   array of string
+     * @param args    array of string
      */
     @Override
-    public void decorate(String prefix, String... args) {
+    public void decorate(String... args) {
         String joinedStr = String.join(" ", args);
-        printer.log(prefix + joinedStr);
+        printer.log(joinedStr + postfix);
     }
     //endregion
 }
