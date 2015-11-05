@@ -18,13 +18,13 @@ public class FormatDecoratorCommand implements DecoratorCommand {
      *
      * @param printer instance of Printer which will be used to log information
      */
-    public FormatDecoratorCommand(Printer printer, String format) throws DecoratorException, PrinterException {
+    public FormatDecoratorCommand(Printer printer, String format) throws DecoratorException {
         if (format == null) {
             throw new DecoratorException("FormatDecorator: format should not be null");
         }
 
         if (printer == null) {
-            throw new PrinterException("Printer couldn't be null");
+            throw new DecoratorException("Constructor printer argument couldn't be null");
         }
 
         this.printer = printer;
@@ -43,11 +43,15 @@ public class FormatDecoratorCommand implements DecoratorCommand {
      * @param args array of string
      */
     @Override
-    public void decorate(String... args) throws PrinterException, DecoratorException {
+    public void decorate(String... args) throws DecoratorException {
         if (args == null || args.length == 0) {
             throw new DecoratorException("FormatDecoder arguments are null or empty");
         }
-        printer.log(String.format(format, args));
+        try {
+            printer.log(String.format(format, args));
+        } catch (PrinterException ex) {
+            throw new DecoratorException("Printer error", ex);
+        }
     }
     //endregion
 }

@@ -32,7 +32,7 @@ public class IntState extends State {
      * @param msg print parameter
      */
     @Override
-    public void log(String msg, DecoratorCommand decor) throws PrinterException, DecoratorException {
+    public void log(String msg, DecoratorCommand decor) throws DecoratorException {
         int value = Integer.parseInt(msg);
 
         if (sum == null) {
@@ -59,7 +59,7 @@ public class IntState extends State {
      * Flush log in order to print buffer result
      */
     @Override
-    public void flush() throws PrinterException, DecoratorException {
+    public void flush() throws DecoratorException {
 
         if (sum != null) {
             prevDecorator.decorate(sum.toString());

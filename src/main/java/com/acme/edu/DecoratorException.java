@@ -7,4 +7,8 @@ public class DecoratorException extends Exception {
     public DecoratorException(String message) {
         super(message);
     }
+
+    public DecoratorException(String message, PrinterException ex) {
+        super(message, ex);
+    }
 }

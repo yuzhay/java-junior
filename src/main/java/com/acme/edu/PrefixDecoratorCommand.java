@@ -24,7 +24,7 @@ public class PrefixDecoratorCommand implements DecoratorCommand {
         }
 
         if (printer == null) {
-            throw new PrinterException("Printer couldn't be null");
+            throw new DecoratorException("Constructor printer argument couldn't be null");
         }
         this.printer = printer;
         this.prefix = prefix;
@@ -40,16 +40,19 @@ public class PrefixDecoratorCommand implements DecoratorCommand {
      * @param args array of string
      */
     @Override
-    public void decorate(String... args) throws PrinterException, DecoratorException {
+    public void decorate(String... args) throws DecoratorException {
         if (args == null || args.length == 0) {
             throw new DecoratorException("PrefixDecoder arguments are null or empty");
         }
-
-        String joinedStr = String.join(" ", args);
-        if (args.length > 0) {
-            printer.log(prefix + joinedStr);
-        } else {
-            printer.log(prefix);
+        try {
+            String joinedStr = String.join(" ", args);
+            if (args.length > 0) {
+                printer.log(prefix + joinedStr);
+            } else {
+                printer.log(prefix);
+            }
+        } catch (PrinterException ex) {
+            throw new DecoratorException("Printer error", ex);
         }
     }
     //endregion

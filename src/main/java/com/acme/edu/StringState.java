@@ -29,7 +29,7 @@ public class StringState extends State {
      * @param message print parameter
      */
     @Override
-    public void log(String message, DecoratorCommand decor) throws PrinterException, DecoratorException {
+    public void log(String message, DecoratorCommand decor) throws DecoratorException {
 
         if (lastStr == null) {
             lastStr = "";
@@ -52,7 +52,7 @@ public class StringState extends State {
      * Flush log in order to print buffer result
      */
     @Override
-    public void flush() throws PrinterException, DecoratorException {
+    public void flush() throws DecoratorException {
         if (strCounter > 1) {
             prevDecorator.decorate(lastStr + String.format(" (x%d)", strCounter));
             strCounter = 1;

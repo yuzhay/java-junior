@@ -18,13 +18,13 @@ public class PostfixDecoratorCommand implements DecoratorCommand {
      *
      * @param printer instance of Printer which will be used to log information
      */
-    public PostfixDecoratorCommand(Printer printer, String postfix) throws PrinterException, DecoratorException {
+    public PostfixDecoratorCommand(Printer printer, String postfix) throws DecoratorException {
         if (postfix == null) {
             throw new DecoratorException("PostfixDecorator format argument should not be null");
         }
 
         if (printer == null) {
-            throw new PrinterException("Printer couldn't be null");
+            throw new DecoratorException("Constructor printer argument couldn't be null");
         }
 
         this.printer = printer;
@@ -41,13 +41,16 @@ public class PostfixDecoratorCommand implements DecoratorCommand {
      * @param args array of string
      */
     @Override
-    public void decorate(String... args) throws PrinterException, DecoratorException {
+    public void decorate(String... args) throws DecoratorException {
         if (args == null || args.length == 0) {
             throw new DecoratorException("PostfixDecorator arguments are null or empty");
         }
-
-        String joinedStr = String.join(" ", args);
-        printer.log(joinedStr + postfix);
+        try {
+            String joinedStr = String.join(" ", args);
+            printer.log(joinedStr + postfix);
+        } catch (PrinterException ex) {
+            throw new DecoratorException("Printer error", ex);
+        }
     }
     //endregion
 }

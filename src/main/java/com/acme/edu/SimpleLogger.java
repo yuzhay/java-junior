@@ -193,8 +193,6 @@ public class SimpleLogger {
             }
 
             curState.flush();
-        } catch (PrinterException ex) {
-            throw new LoggerException(MESSAGE_NOT_LOGGED_PRINTER_ERROR, ex);
         } catch (DecoratorException ex) {
             throw new LoggerException(MESSAGE_NOT_LOGGED_INVALID_DECORATOR_ARGUMENTS, ex);
         }
@@ -206,8 +204,6 @@ public class SimpleLogger {
     public void close() throws LoggerException {
         try {
             curState.flush();
-        } catch (PrinterException ex) {
-            throw new LoggerException(MESSAGE_NOT_LOGGED_PRINTER_ERROR, ex);
         } catch (DecoratorException ex) {
             throw new LoggerException(MESSAGE_NOT_LOGGED_INVALID_DECORATOR_ARGUMENTS, ex);
         }

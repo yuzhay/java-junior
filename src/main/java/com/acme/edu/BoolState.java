@@ -23,7 +23,7 @@ public class BoolState extends State {
      * @param msg print parameter
      */
     @Override
-    public void log(String msg, DecoratorCommand decor) throws PrinterException, DecoratorException {
+    public void log(String msg, DecoratorCommand decor) throws DecoratorException {
         decor.decorate(msg);
     }
 
