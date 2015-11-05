@@ -23,24 +23,24 @@ public class SimpleLoggerTest {
     @Test
     public void shouldIntStateCallDecorateMethod() {
         IntState intState = new IntState();
-        intState.log("10", decor);
-        intState.log("10", decor);
-        intState.log("13", decor);
+        intState.log("-1", decor);
+        intState.log("0", decor);
+        intState.log("1", decor);
         intState.flush(decor);
 
-        verify(decor).decorate("33");
+        verify(decor).decorate("0");
     }
 
     @Test
     public void shouldStringStateCallDecorateMethod() {
         StringState strState = new StringState();
-        strState.log("str1", decor);
-        strState.log("str2", decor);
-        strState.log("str2", decor);
+        strState.log("ThisStringShouldBePrintedOnce", decor);
+        strState.log("ThisStringShouldBePrintedTwice", decor);
+        strState.log("ThisStringShouldBePrintedTwice", decor);
         strState.flush(decor);
 
-        verify(decor).decorate("str1");
-        verify(decor).decorate("str2 (x2)");
+        verify(decor).decorate("ThisStringShouldBePrintedOnce");
+        verify(decor).decorate("ThisStringShouldBePrintedTwice (x2)");
     }
 
     @Test
