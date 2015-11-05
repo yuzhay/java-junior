@@ -13,7 +13,7 @@ public class LoggerOopTest implements SysoutCaptureAndAssertionAbility {
 
 
     @Before
-    public void setUpSystemOut() throws IOException {
+    public void setUpSystemOut() throws PrinterException {
         tearDown();
         captureSysout();
 
@@ -27,7 +27,7 @@ public class LoggerOopTest implements SysoutCaptureAndAssertionAbility {
     }
 
     @Test
-    public void shouldLogInteger() throws IOException {
+    public void shouldLogInteger() throws LoggerException {
         //region when
 
         sp.log(0);
@@ -43,7 +43,7 @@ public class LoggerOopTest implements SysoutCaptureAndAssertionAbility {
     }
 
     @Test
-    public void shouldLogChar() throws IOException {
+    public void shouldLogChar() throws LoggerException {
         //region when
         sp.log('a');
         sp.log('b');
@@ -59,7 +59,7 @@ public class LoggerOopTest implements SysoutCaptureAndAssertionAbility {
 
 
     @Test
-    public void shouldLogString() throws IOException {
+    public void shouldLogString() throws LoggerException {
         //region when
         sp.log("test string 1");
         sp.log("other str");
@@ -74,7 +74,7 @@ public class LoggerOopTest implements SysoutCaptureAndAssertionAbility {
     }
 
     @Test
-    public void shouldLogBoolean() throws IOException {
+    public void shouldLogBoolean() throws LoggerException {
         //region when
         sp.log(true);
         sp.log(false);
@@ -87,19 +87,4 @@ public class LoggerOopTest implements SysoutCaptureAndAssertionAbility {
         assertSysoutContains("false");
         //endregion
     }
-
-    /*@Test
-    public void shouldLogReference() throws IOException {
-        //region when
-        Logger.log(new Object());
-        Logger.close();
-        //endregion
-
-        //region then
-        assertSysoutContains("reference: ");
-        assertSysoutContains("@");
-        //endregion
-    }*/
-
-
 }

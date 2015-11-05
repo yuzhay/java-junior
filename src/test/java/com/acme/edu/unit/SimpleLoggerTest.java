@@ -1,6 +1,7 @@
 package com.acme.edu.unit;
 
 import com.acme.edu.*;
+import jdk.Exported;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,7 +22,7 @@ public class SimpleLoggerTest {
     }
 
     @Test
-    public void shouldIntStateCallDecorateMethod() {
+    public void shouldIntStateCallDecorateMethod() throws PrinterException, DecoratorException {
         IntState intState = new IntState();
         intState.log("-1", decor);
         intState.log("0", decor);
@@ -32,7 +33,7 @@ public class SimpleLoggerTest {
     }
 
     @Test
-    public void shouldStringStateCallDecorateMethod() {
+    public void shouldStringStateCallDecorateMethod() throws PrinterException, DecoratorException {
         StringState strState = new StringState();
         strState.log("ThisStringShouldBePrintedOnce", decor);
         strState.log("ThisStringShouldBePrintedTwice", decor);
@@ -44,7 +45,7 @@ public class SimpleLoggerTest {
     }
 
     @Test
-    public void shouldCharStateCallDecorateMethod() {
+    public void shouldCharStateCallDecorateMethod() throws PrinterException, DecoratorException {
         CharState cState = new CharState();
         cState.log("1", decor);
         cState.log("3", decor);
@@ -57,7 +58,7 @@ public class SimpleLoggerTest {
     }
 
     @Test
-    public void shouldBoolStateCallDecorateMethod() {
+    public void shouldBoolStateCallDecorateMethod() throws PrinterException, DecoratorException {
         BoolState bState = new BoolState();
         bState.log("true", decor);
         bState.log("false", decor);
@@ -68,7 +69,7 @@ public class SimpleLoggerTest {
     }
 
     @Test
-    public void shouldPrefixDecoratorCallPrinterLogMethod() {
+    public void shouldPrefixDecoratorCallPrinterLogMethod() throws PrinterException, DecoratorException {
         PrefixDecoratorCommand dec = new PrefixDecoratorCommand(printer, "myprefix:");
         dec.decorate("HelloWorld");
 
@@ -76,7 +77,7 @@ public class SimpleLoggerTest {
     }
 
     @Test
-    public void shouldPostfixDecoratorCallPrinterLogMethod() {
+    public void shouldPostfixDecoratorCallPrinterLogMethod() throws PrinterException, DecoratorException {
         PostfixDecoratorCommand dec = new PostfixDecoratorCommand(printer, "_mypostfix");
         dec.decorate("HelloThere");
 
@@ -84,10 +85,21 @@ public class SimpleLoggerTest {
     }
 
     @Test
-    public void shouldFormatDecoratorCallPrinterLogMethod() {
+    public void shouldFormatDecoratorCallPrinterLogMethod() throws PrinterException, DecoratorException {
         FormatDecoratorCommand dec = new FormatDecoratorCommand(printer, "(%s)-{%s}-[%s]");
         dec.decorate("a", "b", "c");
 
         verify(printer).log("(a)-{b}-[c]");
+    }
+
+    @Test(expected = DecoratorException.class)
+    public void shouldThrowFormatDecoratorExceptionCallContructorWithNullArgumentMethod() throws PrinterException, DecoratorException {
+        new FormatDecoratorCommand(printer, null);
+    }
+
+    @Test(expected = DecoratorException.class)
+    public void shouldThrowExceptionCallDecorateWithArgNullMethod() throws PrinterException, DecoratorException {
+        FormatDecoratorCommand fdc = new FormatDecoratorCommand(printer, "[]");
+        fdc.decorate(null);
     }
 }

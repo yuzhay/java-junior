@@ -12,7 +12,13 @@ public class SimplePrinter implements Printer {
      * @param message print parameter
      */
     @Override
-    public void log(String message) {
+    public void log(String message) throws PrinterException {
+        /**
+         * Short logical operator ||
+         */
+        if (message == null || message.isEmpty()) {
+            throw new PrinterException("Null or empty Message passed to Printer");
+        }
         System.out.println(message);
     }
 }

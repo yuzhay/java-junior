@@ -18,7 +18,14 @@ public class PrefixDecoratorCommand implements DecoratorCommand {
      *
      * @param printer instance of Printer which will be used to log information
      */
-    public PrefixDecoratorCommand(Printer printer, String prefix) {
+    public PrefixDecoratorCommand(Printer printer, String prefix) throws DecoratorException, PrinterException {
+        if (prefix == null) {
+            throw new DecoratorException("PrefixDecorator format argument should not be null");
+        }
+
+        if (printer == null) {
+            throw new PrinterException("Printer couldn't be null");
+        }
         this.printer = printer;
         this.prefix = prefix;
     }
@@ -33,7 +40,11 @@ public class PrefixDecoratorCommand implements DecoratorCommand {
      * @param args array of string
      */
     @Override
-    public void decorate(String... args) {
+    public void decorate(String... args) throws PrinterException, DecoratorException {
+        if (args == null || args.length == 0) {
+            throw new DecoratorException("PrefixDecoder arguments are null or empty");
+        }
+
         String joinedStr = String.join(" ", args);
         if (args.length > 0) {
             printer.log(prefix + joinedStr);

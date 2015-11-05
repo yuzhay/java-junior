@@ -10,5 +10,5 @@ public interface Printer {
      *
      * @param message print parameter
      */
-    void log(String message);
+    void log(String message) throws PrinterException;
 }

@@ -13,14 +13,14 @@ public abstract class State {
      *
      * @param msg print parameter
      */
-    abstract void log(String msg, DecoratorCommand decor);
+    abstract void log(String msg, DecoratorCommand decor) throws PrinterException, DecoratorException;
 
     /**
      * Flush in order to print buffer result to log
      */
-    abstract void flush();
+    abstract void flush() throws PrinterException, DecoratorException;
 
-    public State switchState(State newState, String message, DecoratorCommand decor) {
+    public State switchState(State newState, String message, DecoratorCommand decor) throws PrinterException, DecoratorException {
         if (this != newState) {
             this.flush();
         }

@@ -22,7 +22,7 @@ public class CharState extends State {
      * @param msg print parameter
      */
     @Override
-    public void log(String msg, DecoratorCommand decor) {
+    public void log(String msg, DecoratorCommand decor) throws PrinterException, DecoratorException {
         decor.decorate(msg);
     }
 
