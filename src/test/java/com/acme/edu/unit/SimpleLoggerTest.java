@@ -93,13 +93,39 @@ public class SimpleLoggerTest {
     }
 
     @Test(expected = DecoratorException.class)
-    public void shouldThrowFormatDecoratorExceptionCallContructorWithNullArgumentMethod() throws PrinterException, DecoratorException {
+    public void shouldThrowFormatDecoratorExceptionCallConstructorWithNullArgumentMethod() throws PrinterException, DecoratorException {
         new FormatDecoratorCommand(printer, null);
     }
 
     @Test(expected = DecoratorException.class)
-    public void shouldThrowExceptionCallDecorateWithArgNullMethod() throws PrinterException, DecoratorException {
-        FormatDecoratorCommand fdc = new FormatDecoratorCommand(printer, "[]");
-        fdc.decorate(null);
+    public void shouldThrowExceptionCallDecorateWithPrintArgNullMethod() throws DecoratorException {
+        new FormatDecoratorCommand(null, "some format string");
     }
+
+    @Test(expected = DecoratorException.class)
+    public void shouldThrowExceptionCallPrefixDecorateWithPrefixArgNullMethod() throws DecoratorException {
+        new PrefixDecoratorCommand(printer, null);
+    }
+
+    @Test(expected = DecoratorException.class)
+    public void shouldThrowExceptionCallPrefixDecorateWithPrinterArgNullMethod() throws DecoratorException {
+        new PrefixDecoratorCommand(null, "some prefix string");
+    }
+
+    @Test(expected = DecoratorException.class)
+    public void shouldThrowExceptionCallPostfixDecorateWithArgPostfixNullMethod() throws DecoratorException {
+        new PostfixDecoratorCommand(printer, null);
+    }
+
+    @Test(expected = DecoratorException.class)
+    public void shouldThrowExceptionCallPostfixDecorateWithArgPrinterNullMethod() throws DecoratorException {
+        new PostfixDecoratorCommand(null, "some postfix string");
+    }
+
+    @Test(expected = DecoratorException.class)
+    public void shouldThrowExceptionCallPrinterLogWithArgNullMethod() throws DecoratorException {
+        FormatDecoratorCommand dec = new FormatDecoratorCommand(printer, "(%s)-{%s}-[%s]");
+        dec.decorate(null);
+    }
+
 }

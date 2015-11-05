@@ -18,7 +18,7 @@ public class PrefixDecoratorCommand implements DecoratorCommand {
      *
      * @param printer instance of Printer which will be used to log information
      */
-    public PrefixDecoratorCommand(Printer printer, String prefix) throws DecoratorException, PrinterException {
+    public PrefixDecoratorCommand(Printer printer, String prefix) throws DecoratorException {
         if (prefix == null) {
             throw new DecoratorException("PrefixDecorator format argument should not be null");
         }
