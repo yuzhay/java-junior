@@ -4,7 +4,7 @@ package com.acme.edu;
  * Logger Integer State class
  * Created by Yuriy on 02.11.2015.
  */
-public class IntState implements State {
+public class IntState extends State {
 
     //region private fields
 
@@ -51,15 +51,18 @@ public class IntState implements State {
         } else {
             sum += value;
         }
+
+        prevDecorator = decor;
     }
 
     /**
      * Flush log in order to print buffer result
      */
     @Override
-    public void flush(DecoratorCommand decor) {
+    public void flush() {
+
         if (sum != null) {
-            decor.decorate(sum.toString());
+            prevDecorator.decorate(sum.toString());
             sum = null;
         }
     }

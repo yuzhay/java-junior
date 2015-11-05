@@ -4,7 +4,7 @@ package com.acme.edu;
  * Logger Char State class
  * Created by Yuriy on 02.11.2015.
  */
-public class CharState implements State {
+public class CharState extends State {
     //region constructor
 
     /**
@@ -30,7 +30,7 @@ public class CharState implements State {
      * Flush log in order to print buffer result
      */
     @Override
-    public void flush(DecoratorCommand decor) {
+    public void flush() {
         /*Do nothing*/
     }
 

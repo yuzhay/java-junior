@@ -4,7 +4,7 @@ package com.acme.edu;
  * Logger String State class
  * Created by Yuriy on 02.11.2015.
  */
-public class StringState implements State {
+public class StringState extends State {
 
     //region private fields
     private String lastStr = "";
@@ -45,20 +45,21 @@ public class StringState implements State {
         }
 
         lastStr = message;
+        prevDecorator = decor;
     }
 
     /**
      * Flush log in order to print buffer result
      */
     @Override
-    public void flush(DecoratorCommand decor) {
+    public void flush() {
         if (strCounter > 1) {
-            decor.decorate(lastStr + String.format(" (x%d)", strCounter));
+            prevDecorator.decorate(lastStr + String.format(" (x%d)", strCounter));
             strCounter = 1;
             lastStr = "";
         } else if (strCounter == 1) {
             if (!lastStr.isEmpty()) {
-                decor.decorate(lastStr);
+                prevDecorator.decorate(lastStr);
             }
             lastStr = "";
         }

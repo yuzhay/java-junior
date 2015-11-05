@@ -4,7 +4,7 @@ package com.acme.edu;
  * Logger Boolean State class
  * Created by Yuriy on 02.11.2015.
  */
-public class BoolState implements State {
+public class BoolState extends State {
     //region constructor
 
     /**
@@ -31,7 +31,7 @@ public class BoolState implements State {
      * Flush log in order to print buffer result
      */
     @Override
-    public void flush(DecoratorCommand decor) {
+    public void flush() {
         /*Do nothing*/
     }
     //endregion

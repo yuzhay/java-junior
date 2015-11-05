@@ -26,7 +26,7 @@ public class SimpleLoggerTest {
         intState.log("-1", decor);
         intState.log("0", decor);
         intState.log("1", decor);
-        intState.flush(decor);
+        intState.flush();
 
         verify(decor).decorate("0");
     }
@@ -37,7 +37,7 @@ public class SimpleLoggerTest {
         strState.log("ThisStringShouldBePrintedOnce", decor);
         strState.log("ThisStringShouldBePrintedTwice", decor);
         strState.log("ThisStringShouldBePrintedTwice", decor);
-        strState.flush(decor);
+        strState.flush();
 
         verify(decor).decorate("ThisStringShouldBePrintedOnce");
         verify(decor).decorate("ThisStringShouldBePrintedTwice (x2)");
@@ -49,7 +49,7 @@ public class SimpleLoggerTest {
         cState.log("1", decor);
         cState.log("3", decor);
         cState.log("2", decor);
-        cState.flush(decor);
+        cState.flush();
 
         verify(decor).decorate("1");
         verify(decor).decorate("3");
@@ -61,7 +61,7 @@ public class SimpleLoggerTest {
         BoolState bState = new BoolState();
         bState.log("true", decor);
         bState.log("false", decor);
-        bState.flush(decor);
+        bState.flush();
 
         verify(decor).decorate("true");
         verify(decor).decorate("false");
