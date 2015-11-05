@@ -19,7 +19,6 @@ public class SimpleLogger {
     private State charState = new CharState();
     private State boolState = new BoolState();
 
-    private DecoratorCommand prevDecorator;
     //endregion
 
     //region constructor
@@ -40,8 +39,9 @@ public class SimpleLogger {
      * @param message print parameter
      */
     public void log(int message) {
+        initState(intState);
         PrefixDecoratorCommand decor = new PrefixDecoratorCommand(new SimplePrinter(), SimpleLogger.LOG_PRIMITIVE);
-        curState = intState.switchState(intState, String.valueOf(message), decor);
+        curState = curState.switchState(intState, String.valueOf(message), decor);
     }
 
     /**
@@ -50,8 +50,9 @@ public class SimpleLogger {
      * @param message print parameter
      */
     public void log(String message) {
+        initState(stringState);
         PrefixDecoratorCommand decor = new PrefixDecoratorCommand(new SimplePrinter(), SimpleLogger.LOG_STRING);
-        curState = stringState.switchState(stringState, message, decor);
+        curState = curState.switchState(stringState, message, decor);
     }
 
     /**
@@ -60,8 +61,9 @@ public class SimpleLogger {
      * @param message print parameter
      */
     public void log(char message) {
+        initState(charState);
         PrefixDecoratorCommand decor = new PrefixDecoratorCommand(new SimplePrinter(), SimpleLogger.LOG_CHAR);
-        curState = charState.switchState(charState, String.valueOf(message), decor);
+        curState = curState.switchState(charState, String.valueOf(message), decor);
     }
 
     /**
@@ -70,8 +72,9 @@ public class SimpleLogger {
      * @param message print parameter
      */
     public void log(boolean message) {
+        initState(boolState);
         PrefixDecoratorCommand decor = new PrefixDecoratorCommand(new SimplePrinter(), SimpleLogger.LOG_PRIMITIVE);
-        curState = boolState.switchState(boolState, String.valueOf(message), decor);
+        curState = curState.switchState(boolState, String.valueOf(message), decor);
     }
 
 
@@ -82,13 +85,14 @@ public class SimpleLogger {
      */
     public void log(int... messages) {
         long sum = 0;
+        initState(intState);
         PrefixDecoratorCommand decor = new PrefixDecoratorCommand(new SimplePrinter(), SimpleLogger.LOG_PRIMITIVE);
 
         for (int i = 0; i < messages.length; i++) {
             sum += messages[i];
         }
 
-        curState = intState.switchState(intState, String.valueOf(sum), decor);
+        curState = curState.switchState(intState, String.valueOf(sum), decor);
         curState.flush();
     }
 
@@ -98,9 +102,10 @@ public class SimpleLogger {
      * @param messages print parameter
      */
     public void log(int[]... messages) {
+        initState(intState);
         PrefixDecoratorCommand decor = new PrefixDecoratorCommand(new SimplePrinter(), SimpleLogger.LOG_PRIMITIVE);
         long sum = get2dSum(messages);
-        curState = intState.switchState(intState, String.valueOf(sum), decor);
+        curState = curState.switchState(intState, String.valueOf(sum), decor);
         curState.flush();
     }
 
@@ -112,6 +117,7 @@ public class SimpleLogger {
      */
     public void log(int[][][]... messages) {
         long sum = 0;
+        initState(intState);
         PrefixDecoratorCommand decor = new PrefixDecoratorCommand(new SimplePrinter(), SimpleLogger.LOG_PRIMITIVE);
 
         for (int i = 0; i < messages.length; i++) {
@@ -119,7 +125,7 @@ public class SimpleLogger {
                 sum += get2dSum(messages[i][j]);
             }
         }
-        curState = intState.switchState(intState, String.valueOf(sum), decor);
+        curState = curState.switchState(intState, String.valueOf(sum), decor);
 
         curState.flush();
     }
@@ -130,11 +136,12 @@ public class SimpleLogger {
      * @param messages print parameter
      */
     public void log(String... messages) {
+        initState(stringState);
         FormatDecoratorCommand decor = new FormatDecoratorCommand(
                 new SimplePrinter(), SimpleLogger.LOG_STRING + "%s");
 
         for (int i = 0; i < messages.length; i++) {
-            curState = stringState.switchState(stringState, String.valueOf(messages[i]), decor);
+            curState = curState.switchState(stringState, String.valueOf(messages[i]), decor);
         }
 
         curState.flush();
@@ -150,16 +157,6 @@ public class SimpleLogger {
     //endregion
 
     //region private methods
-    /*private void switchState(State st, String message, DecoratorCommand decor) {
-        if (curState != null && curState != st) {
-            curState.flush(prevDecorator);
-        }
-
-        curState = st;
-        prevDecorator = decor;
-        curState.log(message, decor);
-    }*/
-
     private long get2dSum(int[][] messages) {
         long sum = 0;
         for (int i = 0; i < messages.length; i++) {
@@ -168,6 +165,12 @@ public class SimpleLogger {
             }
         }
         return sum;
+    }
+
+    private void initState(State st) {
+        if (curState == null) {
+            curState = st;
+        }
     }
     //endregion
 }
