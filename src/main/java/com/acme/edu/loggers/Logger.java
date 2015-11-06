@@ -76,15 +76,30 @@ public class Logger {
      *
      * @param message print parameter
      */
-    public void log(String message) throws LoggerException {
+    public void log(String message, boolean useDecorator) throws LoggerException {
         initState(stringState);
+
+        String prefix = "";
+        if (useDecorator) {
+            prefix = Logger.LOG_STRING;
+        }
+
         try {
             PrefixDecoratorCommand decor = new PrefixDecoratorCommand(
-                    Logger.LOG_STRING, printers);
+                    prefix, printers);
             curState = curState.switchState(stringState, message, decor);
         } catch (DecoratorException ex) {
             throw new LoggerException(MESSAGE_NOT_LOGGED_INVALID_DECORATOR_ARGUMENTS, ex);
         }
+    }
+
+    /**
+     * Print String parameter to log
+     *
+     * @param message print parameter
+     */
+    public void log(String message) throws LoggerException {
+        log(message, true);
     }
 
     /**

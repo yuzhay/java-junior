@@ -34,6 +34,10 @@ public class StringState extends State {
     @Override
     public void log(String message, DecoratorCommand decor) throws DecoratorException {
 
+        if (message == null) {
+            throw new DecoratorException("Message couldn't be null");
+        }
+
         if (lastStr == null) {
             lastStr = "";
         }
@@ -61,7 +65,7 @@ public class StringState extends State {
             strCounter = 1;
             lastStr = "";
         } else if (strCounter == 1) {
-            if (!lastStr.isEmpty()) {
+            if (lastStr != null && !lastStr.isEmpty()) {
                 prevDecorator.decorate(lastStr);
                 prevDecorator.flush();
             }

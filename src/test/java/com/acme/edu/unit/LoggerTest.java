@@ -7,6 +7,7 @@ import com.acme.edu.decorators.PostfixDecoratorCommand;
 import com.acme.edu.decorators.PrefixDecoratorCommand;
 import com.acme.edu.exceptions.DecoratorException;
 import com.acme.edu.exceptions.PrinterException;
+import com.acme.edu.printers.NetPrinter;
 import com.acme.edu.printers.Printer;
 import com.acme.edu.printers.SimplePrinter;
 import com.acme.edu.states.BoolState;
