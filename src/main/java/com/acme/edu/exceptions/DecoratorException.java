@@ -6,16 +6,29 @@ import java.util.ArrayList;
  * Created by Yuriy on 05.11.2015.
  */
 public class DecoratorException extends Exception {
-    private ArrayList<PrinterException> printerExceptions = new ArrayList<PrinterException>();
+    private final ArrayList<PrinterException> printerExceptions = new ArrayList<PrinterException>();
 
+    /**
+     * Decorates String message
+     *
+     * @param message param to decorate
+     */
     public DecoratorException(String message) {
         super(message);
     }
 
+    /**
+     * Adds new PrinterException to list. You can use this list in the feature for details.
+     * @param ex Exception to add
+     */
     public void addPrinterException(PrinterException ex) {
         printerExceptions.add(ex);
     }
 
+    /**
+     * Getter for PrinterExceptionsList
+     * @return
+     */
     public ArrayList<PrinterException> getPrinterExceptionsList() {
         return printerExceptions;
     }

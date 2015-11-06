@@ -19,11 +19,22 @@ public class NetPrinter implements Printer {
     private int port;
     //endregion
 
+    /**
+     * Creates Printer client. Log messages will be sent to host:port.
+     *
+     * @param host domain name or IP
+     * @param port any port 1024..65535
+     */
     public NetPrinter(String host, int port) {
         this.host = host;
         this.port = port;
     }
 
+    /**
+     * Sends log message to remote server
+     * @param message print parameter
+     * @throws PrinterException
+     */
     @Override
     public void log(String message) throws PrinterException {
         try {
@@ -45,8 +56,12 @@ public class NetPrinter implements Printer {
         }
     }
 
+    /**
+     * Flushes buffer
+     * @throws PrinterException
+     */
     @Override
     public void flush() throws PrinterException {
-
+        /*Implement when NetPrinter will work with buffer*/
     }
 }
