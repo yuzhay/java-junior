@@ -4,7 +4,7 @@ import com.acme.edu.exceptions.PrinterException;
 import com.acme.edu.printers.Printer;
 
 /**
- * Printer interface for SimpleLogger
+ * Printer interface for Logger
  * Created by Yuriy on 02.11.2015.
  */
 public class SimplePrinter implements Printer {
@@ -23,5 +23,10 @@ public class SimplePrinter implements Printer {
             throw new PrinterException("Null or empty Message passed to Printer");
         }
         System.out.println(message);
+    }
+
+    @Override
+    public void flush() throws PrinterException {
+        /*Do nothing*/
     }
 }

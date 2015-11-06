@@ -66,6 +66,7 @@ public class IntState extends State {
 
         if (sum != null) {
             prevDecorator.decorate(sum.toString());
+            prevDecorator.flush();
             sum = null;
         }
     }

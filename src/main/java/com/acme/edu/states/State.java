@@ -4,7 +4,7 @@ import com.acme.edu.decorators.DecoratorCommand;
 import com.acme.edu.exceptions.DecoratorException;
 
 /**
- * State abstract for SimpleLogger
+ * State abstract for Logger
  * Created by Yuriy on 02.11.2015.
  */
 public abstract class State {

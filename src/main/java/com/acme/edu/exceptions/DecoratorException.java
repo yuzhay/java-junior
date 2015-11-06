@@ -9,7 +9,7 @@ public class DecoratorException extends Exception {
     }
 
     /**
-     * DecoratorException constructor used in SimpleLogger class.
+     * DecoratorException constructor used in Logger class.
      *
      * @param message this message will be shown as exception description
      * @param ex      in case an exception has been thrown in Printer, set this param to PrinterException

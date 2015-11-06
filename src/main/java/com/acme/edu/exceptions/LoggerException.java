@@ -8,7 +8,7 @@ import com.acme.edu.exceptions.DecoratorException;
 public class LoggerException extends Exception {
 
     /**
-     * LoggerException constructor used in SimpleLogger class.
+     * LoggerException constructor used in Logger class.
      *
      * @param message this message will be shown as exception description
      */
@@ -17,7 +17,7 @@ public class LoggerException extends Exception {
     }
 
     /**
-     * LoggerException constructor used in SimpleLogger class.
+     * LoggerException constructor used in Logger class.
      * @param message this message will be shown as exception description
      * @param ex in case an exception has been thrown in Decorator, set this param to DecoratorException
      */

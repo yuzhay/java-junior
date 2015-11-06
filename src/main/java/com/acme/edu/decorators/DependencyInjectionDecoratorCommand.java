@@ -21,4 +21,14 @@ public abstract class DependencyInjectionDecoratorCommand implements DecoratorCo
             }
         }
     }
+
+    public void flush() throws DecoratorException {
+        for (Printer printer : printers) {
+            try {
+                printer.flush();
+            } catch (PrinterException e) {
+                throw new DecoratorException("Printer is not available", e);
+            }
+        }
+    }
 }

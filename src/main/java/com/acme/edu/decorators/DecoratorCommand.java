@@ -7,4 +7,6 @@ import com.acme.edu.exceptions.DecoratorException;
  */
 public interface DecoratorCommand {
     void decorate(String... args) throws DecoratorException;
+
+    void flush() throws DecoratorException;
 }

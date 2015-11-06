@@ -63,6 +63,7 @@ public class StringState extends State {
         } else if (strCounter == 1) {
             if (!lastStr.isEmpty()) {
                 prevDecorator.decorate(lastStr);
+                prevDecorator.flush();
             }
             lastStr = "";
         }

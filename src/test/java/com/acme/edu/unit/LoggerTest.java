@@ -1,5 +1,6 @@
 package com.acme.edu.unit;
 
+
 import com.acme.edu.decorators.DecoratorCommand;
 import com.acme.edu.decorators.FormatDecoratorCommand;
 import com.acme.edu.decorators.PostfixDecoratorCommand;
@@ -15,13 +16,16 @@ import com.acme.edu.states.StringState;
 import org.junit.Before;
 import org.junit.Test;
 
+
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 /**
  * Mock test for Logger States and Decorators
  * Created by Yuriy on 03.11.2015.
  */
-public class SimpleLoggerTest {
+public class LoggerTest {
     private DecoratorCommand decor;
     private Printer printer;
 
@@ -137,5 +141,6 @@ public class SimpleLoggerTest {
         FormatDecoratorCommand dec = new FormatDecoratorCommand("(%s)-{%s}-[%s]", printer);
         dec.decorate(null);
     }
+
 
 }

@@ -2,6 +2,7 @@ package com.acme.edu.iteration03;
 
 import com.acme.edu.*;
 import com.acme.edu.exceptions.LoggerException;
+import com.acme.edu.loggers.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +10,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 public class LoggerOopTest implements SysoutCaptureAndAssertionAbility {
-    private SimpleLogger sp;
+    private Logger sp;
 
     //region given
     @Before
@@ -17,7 +18,7 @@ public class LoggerOopTest implements SysoutCaptureAndAssertionAbility {
         tearDown();
         captureSysout();
 
-        sp = new SimpleLogger();
+        sp = new Logger();
     }
     //endregion
 

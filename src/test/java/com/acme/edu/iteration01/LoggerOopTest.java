@@ -3,13 +3,14 @@ package com.acme.edu.iteration01;
 import com.acme.edu.*;
 import com.acme.edu.exceptions.LoggerException;
 import com.acme.edu.exceptions.PrinterException;
+import com.acme.edu.loggers.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class LoggerOopTest implements SysoutCaptureAndAssertionAbility {
     //region given
-    private SimpleLogger sp;
+    private Logger sp;
 
 
     @Before
@@ -17,7 +18,7 @@ public class LoggerOopTest implements SysoutCaptureAndAssertionAbility {
         tearDown();
         captureSysout();
 
-        sp = new SimpleLogger();
+        sp = new Logger();
     }
     //endregion
 

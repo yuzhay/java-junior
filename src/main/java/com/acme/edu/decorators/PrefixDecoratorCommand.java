@@ -54,5 +54,6 @@ public class PrefixDecoratorCommand extends DependencyInjectionDecoratorCommand 
             printToAllPrinters(prefix);
         }
     }
+
     //endregion
 }
