@@ -80,7 +80,7 @@ public class SimpleLoggerTest {
 
     @Test
     public void shouldPrefixDecoratorCallPrinterLogMethod() throws PrinterException, DecoratorException {
-        PrefixDecoratorCommand dec = new PrefixDecoratorCommand(printer, "myprefix:");
+        PrefixDecoratorCommand dec = new PrefixDecoratorCommand("myprefix:", printer);
         dec.decorate("HelloWorld");
 
         verify(printer).log("myprefix:HelloWorld");
@@ -88,7 +88,7 @@ public class SimpleLoggerTest {
 
     @Test
     public void shouldPostfixDecoratorCallPrinterLogMethod() throws PrinterException, DecoratorException {
-        PostfixDecoratorCommand dec = new PostfixDecoratorCommand(printer, "_mypostfix");
+        PostfixDecoratorCommand dec = new PostfixDecoratorCommand("_mypostfix", printer);
         dec.decorate("HelloThere");
 
         verify(printer).log("HelloThere_mypostfix");
@@ -96,7 +96,7 @@ public class SimpleLoggerTest {
 
     @Test
     public void shouldFormatDecoratorCallPrinterLogMethod() throws PrinterException, DecoratorException {
-        FormatDecoratorCommand dec = new FormatDecoratorCommand(printer, "(%s)-{%s}-[%s]");
+        FormatDecoratorCommand dec = new FormatDecoratorCommand("(%s)-{%s}-[%s]", printer);
         dec.decorate("a", "b", "c");
 
         verify(printer).log("(a)-{b}-[c]");
@@ -104,37 +104,37 @@ public class SimpleLoggerTest {
 
     @Test(expected = DecoratorException.class)
     public void shouldThrowFormatDecoratorExceptionCallConstructorWithNullArgumentMethod() throws PrinterException, DecoratorException {
-        new FormatDecoratorCommand(printer, null);
+        new FormatDecoratorCommand(null, printer);
     }
 
     @Test(expected = DecoratorException.class)
     public void shouldThrowExceptionCallDecorateWithPrintArgNullMethod() throws DecoratorException {
-        new FormatDecoratorCommand(null, "some format string");
+        new FormatDecoratorCommand("some format string", null);
     }
 
     @Test(expected = DecoratorException.class)
     public void shouldThrowExceptionCallPrefixDecorateWithPrefixArgNullMethod() throws DecoratorException {
-        new PrefixDecoratorCommand(printer, null);
+        new PrefixDecoratorCommand(null, printer);
     }
 
     @Test(expected = DecoratorException.class)
     public void shouldThrowExceptionCallPrefixDecorateWithPrinterArgNullMethod() throws DecoratorException {
-        new PrefixDecoratorCommand(null, "some prefix string");
+        new PrefixDecoratorCommand("some prefix string", null);
     }
 
     @Test(expected = DecoratorException.class)
     public void shouldThrowExceptionCallPostfixDecorateWithArgPostfixNullMethod() throws DecoratorException {
-        new PostfixDecoratorCommand(printer, null);
+        new PostfixDecoratorCommand(null, printer);
     }
 
     @Test(expected = DecoratorException.class)
     public void shouldThrowExceptionCallPostfixDecorateWithArgPrinterNullMethod() throws DecoratorException {
-        new PostfixDecoratorCommand(null, "some postfix string");
+        new PostfixDecoratorCommand("some postfix string", null);
     }
 
     @Test(expected = DecoratorException.class)
     public void shouldThrowExceptionCallPrinterLogWithArgNullMethod() throws DecoratorException {
-        FormatDecoratorCommand dec = new FormatDecoratorCommand(printer, "(%s)-{%s}-[%s]");
+        FormatDecoratorCommand dec = new FormatDecoratorCommand("(%s)-{%s}-[%s]", printer);
         dec.decorate(null);
     }
 

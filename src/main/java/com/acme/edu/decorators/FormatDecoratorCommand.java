@@ -8,10 +8,9 @@ import com.acme.edu.exceptions.PrinterException;
  * FormatDecoratorCommand prints string using format
  * Created by Yuriy on 03.11.2015.
  */
-public class FormatDecoratorCommand implements DecoratorCommand {
+public class FormatDecoratorCommand extends DependencyInjectionDecoratorCommand {
 
     //region private fields
-    private final Printer printer;
     private final String format;
     //endregion
 
@@ -20,21 +19,20 @@ public class FormatDecoratorCommand implements DecoratorCommand {
     /**
      * Creates instance of PrefixDecoratorCommand
      *
-     * @param printer instance of Printer which will be used to log information
+     * @param printers instances of Printers which will be used to log information
      */
-    public FormatDecoratorCommand(Printer printer, String format) throws DecoratorException {
+    public FormatDecoratorCommand(String format, Printer... printers) throws DecoratorException {
         if (format == null) {
             throw new DecoratorException("FormatDecorator: format should not be null");
         }
 
-        if (printer == null) {
+        if (printers == null || printers.length == 0) {
             throw new DecoratorException("Constructor printer argument couldn't be null");
         }
 
-        this.printer = printer;
+        this.printers = printers;
         this.format = format;
     }
-
 
     //endregion
 
@@ -51,11 +49,7 @@ public class FormatDecoratorCommand implements DecoratorCommand {
         if (args == null || args.length == 0) {
             throw new DecoratorException("FormatDecoder arguments are null or empty");
         }
-        try {
-            printer.log(String.format(format, args));
-        } catch (PrinterException ex) {
-            throw new DecoratorException("Printer error", ex);
-        }
+        printToAllPrinters(String.format(format, args));
     }
     //endregion
 }

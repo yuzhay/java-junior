@@ -8,10 +8,9 @@ import com.acme.edu.exceptions.PrinterException;
  * PrefixDecoratorCommand prints string with specified prefix
  * Created by Yuriy on 03.11.2015.
  */
-public class PrefixDecoratorCommand implements DecoratorCommand {
+public class PrefixDecoratorCommand extends DependencyInjectionDecoratorCommand {
 
     //region private fields
-    private final Printer printer;
     private final String prefix;
     //endregion
 
@@ -20,17 +19,17 @@ public class PrefixDecoratorCommand implements DecoratorCommand {
     /**
      * Creates instance of PrefixDecoratorCommand
      *
-     * @param printer instance of Printer which will be used to log information
+     * @param printers instances of Printer which will be used to log information
      */
-    public PrefixDecoratorCommand(Printer printer, String prefix) throws DecoratorException {
+    public PrefixDecoratorCommand(String prefix, Printer... printers) throws DecoratorException {
         if (prefix == null) {
             throw new DecoratorException("PrefixDecorator format argument should not be null");
         }
 
-        if (printer == null) {
+        if (printers == null || printers.length == 0) {
             throw new DecoratorException("Constructor printer argument couldn't be null");
         }
-        this.printer = printer;
+        this.printers = printers;
         this.prefix = prefix;
     }
     //endregion
@@ -48,15 +47,11 @@ public class PrefixDecoratorCommand implements DecoratorCommand {
         if (args == null || args.length == 0) {
             throw new DecoratorException("PrefixDecoder arguments are null or empty");
         }
-        try {
-            String joinedStr = String.join(" ", args);
-            if (args.length > 0) {
-                printer.log(prefix + joinedStr);
-            } else {
-                printer.log(prefix);
-            }
-        } catch (PrinterException ex) {
-            throw new DecoratorException("Printer error", ex);
+        String joinedStr = String.join(" ", args);
+        if (args.length > 0) {
+            printToAllPrinters(prefix + joinedStr);
+        } else {
+            printToAllPrinters(prefix);
         }
     }
     //endregion

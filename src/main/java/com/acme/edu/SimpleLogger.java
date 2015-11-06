@@ -50,7 +50,8 @@ public class SimpleLogger {
     public void log(int message) throws LoggerException {
         initState(intState);
         try {
-            PrefixDecoratorCommand decor = new PrefixDecoratorCommand(new SimplePrinter(), SimpleLogger.LOG_PRIMITIVE);
+            PrefixDecoratorCommand decor = new PrefixDecoratorCommand(
+                    SimpleLogger.LOG_PRIMITIVE, new SimplePrinter());
             curState = curState.switchState(intState, String.valueOf(message), decor);
         } catch (DecoratorException ex) {
             throw new LoggerException(MESSAGE_NOT_LOGGED_INVALID_DECORATOR_ARGUMENTS, ex);
@@ -65,7 +66,8 @@ public class SimpleLogger {
     public void log(String message) throws LoggerException {
         initState(stringState);
         try {
-            PrefixDecoratorCommand decor = new PrefixDecoratorCommand(new SimplePrinter(), SimpleLogger.LOG_STRING);
+            PrefixDecoratorCommand decor = new PrefixDecoratorCommand(
+                    SimpleLogger.LOG_STRING, new SimplePrinter());
             curState = curState.switchState(stringState, message, decor);
         } catch (DecoratorException ex) {
             throw new LoggerException(MESSAGE_NOT_LOGGED_INVALID_DECORATOR_ARGUMENTS, ex);
@@ -80,7 +82,9 @@ public class SimpleLogger {
     public void log(char message) throws LoggerException {
         initState(charState);
         try {
-            PrefixDecoratorCommand decor = new PrefixDecoratorCommand(new SimplePrinter(), SimpleLogger.LOG_CHAR);
+            PrefixDecoratorCommand decor = new PrefixDecoratorCommand(
+                    SimpleLogger.LOG_CHAR, new SimplePrinter());
+
             curState = curState.switchState(charState, String.valueOf(message), decor);
         } catch (DecoratorException ex) {
             throw new LoggerException(MESSAGE_NOT_LOGGED_INVALID_DECORATOR_ARGUMENTS, ex);
@@ -96,7 +100,8 @@ public class SimpleLogger {
         initState(boolState);
 
         try {
-            PrefixDecoratorCommand decor = new PrefixDecoratorCommand(new SimplePrinter(), SimpleLogger.LOG_PRIMITIVE);
+            PrefixDecoratorCommand decor = new PrefixDecoratorCommand(
+                    SimpleLogger.LOG_PRIMITIVE, new SimplePrinter());
             curState = curState.switchState(boolState, String.valueOf(message), decor);
         } catch (DecoratorException ex) {
             throw new LoggerException(MESSAGE_NOT_LOGGED_INVALID_DECORATOR_ARGUMENTS, ex);
@@ -113,7 +118,8 @@ public class SimpleLogger {
         long sum = 0;
         initState(intState);
         try {
-            PrefixDecoratorCommand decor = new PrefixDecoratorCommand(new SimplePrinter(), SimpleLogger.LOG_PRIMITIVE);
+            PrefixDecoratorCommand decor = new PrefixDecoratorCommand(
+                    SimpleLogger.LOG_PRIMITIVE, new SimplePrinter());
 
             for (int message : messages) {
                 sum += message;
@@ -134,7 +140,8 @@ public class SimpleLogger {
     public void log(int[]... messages) throws LoggerException {
         initState(intState);
         try {
-            PrefixDecoratorCommand decor = new PrefixDecoratorCommand(new SimplePrinter(), SimpleLogger.LOG_PRIMITIVE);
+            PrefixDecoratorCommand decor = new PrefixDecoratorCommand(
+                    SimpleLogger.LOG_PRIMITIVE, new SimplePrinter());
             long sum = get2dSum(messages);
             curState = curState.switchState(intState, String.valueOf(sum), decor);
             curState.flush();
@@ -153,7 +160,8 @@ public class SimpleLogger {
         long sum = 0;
         initState(intState);
         try {
-            PrefixDecoratorCommand decor = new PrefixDecoratorCommand(new SimplePrinter(), SimpleLogger.LOG_PRIMITIVE);
+            PrefixDecoratorCommand decor = new PrefixDecoratorCommand(
+                    SimpleLogger.LOG_PRIMITIVE, new SimplePrinter());
 
             for (int[][][] message : messages) {
                 for (int[][] aMessage : message) {
@@ -177,7 +185,7 @@ public class SimpleLogger {
         initState(stringState);
         try {
             FormatDecoratorCommand decor = new FormatDecoratorCommand(
-                    new SimplePrinter(), SimpleLogger.LOG_STRING + "%s");
+                    SimpleLogger.LOG_STRING + "%s", new SimplePrinter());
 
             for (String message : messages) {
                 curState = curState.switchState(stringState, String.valueOf(message), decor);

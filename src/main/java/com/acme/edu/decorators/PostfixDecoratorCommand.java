@@ -8,10 +8,9 @@ import com.acme.edu.exceptions.PrinterException;
  * PostfixDecoratorCommand prints string with specified prefix
  * Created by Yuriy on 03.11.2015.
  */
-public class PostfixDecoratorCommand implements DecoratorCommand {
+public class PostfixDecoratorCommand extends DependencyInjectionDecoratorCommand {
 
     //region private fields
-    private final Printer printer;
     private final String postfix;
     //endregion
 
@@ -20,18 +19,18 @@ public class PostfixDecoratorCommand implements DecoratorCommand {
     /**
      * Creates instance of PrefixDecoratorCommand
      *
-     * @param printer instance of Printer which will be used to log information
+     * @param printers instances of Printer which will be used to log information
      */
-    public PostfixDecoratorCommand(Printer printer, String postfix) throws DecoratorException {
+    public PostfixDecoratorCommand(String postfix, Printer... printers) throws DecoratorException {
         if (postfix == null) {
             throw new DecoratorException("PostfixDecorator format argument should not be null");
         }
 
-        if (printer == null) {
+        if (printers == null || printers.length == 0) {
             throw new DecoratorException("Constructor printer argument couldn't be null");
         }
 
-        this.printer = printer;
+        this.printers = printers;
         this.postfix = postfix;
     }
     //endregion
@@ -49,12 +48,8 @@ public class PostfixDecoratorCommand implements DecoratorCommand {
         if (args == null || args.length == 0) {
             throw new DecoratorException("PostfixDecorator arguments are null or empty");
         }
-        try {
-            String joinedStr = String.join(" ", args);
-            printer.log(joinedStr + postfix);
-        } catch (PrinterException ex) {
-            throw new DecoratorException("Printer error", ex);
-        }
+        String joinedStr = String.join(" ", args);
+        printToAllPrinters(joinedStr + postfix);
     }
     //endregion
 }
