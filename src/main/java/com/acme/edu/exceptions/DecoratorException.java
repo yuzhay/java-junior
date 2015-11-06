@@ -1,11 +1,23 @@
 package com.acme.edu.exceptions;
 
+import java.util.ArrayList;
+
 /**
  * Created by Yuriy on 05.11.2015.
  */
 public class DecoratorException extends Exception {
+    private ArrayList<PrinterException> printerExceptions = new ArrayList<PrinterException>();
+
     public DecoratorException(String message) {
         super(message);
+    }
+
+    public void addPrinterException(PrinterException ex) {
+        printerExceptions.add(ex);
+    }
+
+    public ArrayList<PrinterException> getPrinterExceptionsList() {
+        return printerExceptions;
     }
 
     /**
