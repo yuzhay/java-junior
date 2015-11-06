@@ -91,6 +91,7 @@ public class LoggerOopTest {
         //Wait until file will be created
         Thread.sleep(1000);
         String actual = FileUtils.readFileToString(file, charset);
+
         assertEquals(expected, actual);
         //endregion
     }
