@@ -1,12 +1,13 @@
 package com.acme.edu.exceptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Yuriy on 05.11.2015.
  */
 public class DecoratorException extends Exception {
-    private final ArrayList<PrinterException> printerExceptions = new ArrayList<PrinterException>();
+    private final List<PrinterException> printerExceptions = new ArrayList<PrinterException>();
 
     /**
      * Decorates String message
@@ -29,7 +30,7 @@ public class DecoratorException extends Exception {
      * Getter for PrinterExceptionsList
      * @return
      */
-    public ArrayList<PrinterException> getPrinterExceptionsList() {
+    public List<PrinterException> getPrinterExceptionsList() {
         return printerExceptions;
     }
 

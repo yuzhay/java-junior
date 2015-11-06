@@ -16,6 +16,7 @@ public abstract class DependencyInjectionDecoratorCommand implements DecoratorCo
      *
      * @param args array of string
      */
+    @Override
     public abstract void decorate(String... args) throws DecoratorException;
 
     /**
@@ -23,6 +24,7 @@ public abstract class DependencyInjectionDecoratorCommand implements DecoratorCo
      *
      * @throws DecoratorException
      */
+    @Override
     public void flush() throws DecoratorException {
         DecoratorException de = new DecoratorException(message);
         for (Printer printer : printers) {
