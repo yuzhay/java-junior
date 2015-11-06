@@ -1,11 +1,11 @@
 package com.acme.edu.iteration01;
 
 import com.acme.edu.*;
+import com.acme.edu.exceptions.LoggerException;
+import com.acme.edu.exceptions.PrinterException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
 
 public class LoggerOopTest implements SysoutCaptureAndAssertionAbility {
     //region given

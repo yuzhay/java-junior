@@ -1,4 +1,7 @@
-package com.acme.edu;
+package com.acme.edu.states;
+
+import com.acme.edu.decorators.DecoratorCommand;
+import com.acme.edu.exceptions.DecoratorException;
 
 /**
  * Logger Integer State class

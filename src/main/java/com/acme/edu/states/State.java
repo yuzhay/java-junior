@@ -1,4 +1,7 @@
-package com.acme.edu;
+package com.acme.edu.states;
+
+import com.acme.edu.decorators.DecoratorCommand;
+import com.acme.edu.exceptions.DecoratorException;
 
 /**
  * State abstract for SimpleLogger
@@ -18,7 +21,7 @@ public abstract class State {
     /**
      * Flush in order to print buffer result to log
      */
-    abstract void flush() throws DecoratorException;
+    public abstract void flush() throws DecoratorException;
 
     public State switchState(State newState, String message, DecoratorCommand decor) throws DecoratorException {
         if (this != newState) {

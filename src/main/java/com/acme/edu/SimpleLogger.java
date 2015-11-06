@@ -1,5 +1,12 @@
 package com.acme.edu;
 
+import com.acme.edu.decorators.FormatDecoratorCommand;
+import com.acme.edu.decorators.PrefixDecoratorCommand;
+import com.acme.edu.exceptions.DecoratorException;
+import com.acme.edu.exceptions.LoggerException;
+import com.acme.edu.printers.SimplePrinter;
+import com.acme.edu.states.*;
+
 /**
  * Smart simple logger.
  * Created by Yuriy on 02.11.2015.
@@ -212,4 +219,5 @@ public class SimpleLogger {
         }
     }
     //endregion
+
 }

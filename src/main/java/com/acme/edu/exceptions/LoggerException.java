@@ -1,4 +1,6 @@
-package com.acme.edu;
+package com.acme.edu.exceptions;
+
+import com.acme.edu.exceptions.DecoratorException;
 
 /**
  * Created by Yuriy on 05.11.2015.

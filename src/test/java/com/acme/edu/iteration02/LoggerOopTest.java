@@ -1,9 +1,9 @@
 package com.acme.edu.iteration02;
 
 import com.acme.edu.*;
+import com.acme.edu.exceptions.LoggerException;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;

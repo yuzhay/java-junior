@@ -1,6 +1,7 @@
 package com.acme.edu.iteration03;
 
 import com.acme.edu.*;
+import com.acme.edu.exceptions.LoggerException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,7 +1,17 @@
 package com.acme.edu.unit;
 
-import com.acme.edu.*;
-import jdk.Exported;
+import com.acme.edu.decorators.DecoratorCommand;
+import com.acme.edu.decorators.FormatDecoratorCommand;
+import com.acme.edu.decorators.PostfixDecoratorCommand;
+import com.acme.edu.decorators.PrefixDecoratorCommand;
+import com.acme.edu.exceptions.DecoratorException;
+import com.acme.edu.exceptions.PrinterException;
+import com.acme.edu.printers.Printer;
+import com.acme.edu.printers.SimplePrinter;
+import com.acme.edu.states.BoolState;
+import com.acme.edu.states.CharState;
+import com.acme.edu.states.IntState;
+import com.acme.edu.states.StringState;
 import org.junit.Before;
 import org.junit.Test;
 

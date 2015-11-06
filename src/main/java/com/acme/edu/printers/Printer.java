@@ -1,4 +1,6 @@
-package com.acme.edu;
+package com.acme.edu.printers;
+
+import com.acme.edu.exceptions.PrinterException;
 
 /**
  * Base Printer interface for SimpleLogger
