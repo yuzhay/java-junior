@@ -1,5 +1,6 @@
 package com.acme.edu.loggers;
 
+import com.acme.edu.exceptions.FilePrinterLoggerServerException;
 import com.acme.edu.exceptions.LoggerException;
 import com.acme.edu.exceptions.PrinterException;
 import com.acme.edu.printers.FilePrinter;
@@ -17,6 +18,11 @@ import java.net.SocketTimeoutException;
  * Network version of Printer class which is used in Logger class.
  */
 public class FilePrinterLoggerServer {
+    public static final String FIELD_MESSAGE = "message";
+    public static final String FIELD_STATUS = "status";
+    public static final String FIELD_HASH = "hash";
+    public static final String FIELD_ERROR = "error";
+
     //region private fields
     private ServerSocket socket;
     private Logger logger;
@@ -37,7 +43,7 @@ public class FilePrinterLoggerServer {
                     /*Do nothing. Time is out. Wait for next client*/
                     ste.printStackTrace();
                 } catch (IOException e) {
-                    throw new RuntimeException("FilePrinterLoggerServer IOExceptions", e);
+                    throw new FilePrinterLoggerServerException("FilePrinterLoggerServer IOExceptions", e);
                 }
             }
             Thread.currentThread().interrupt();
@@ -93,24 +99,24 @@ public class FilePrinterLoggerServer {
         JSONObject jsonRequest = new JSONObject(buffer);
         JSONObject jsonResponse = new JSONObject();
 
-        if (!jsonRequest.keySet().contains("message")) {
-            jsonResponse.put("status", "error");
-            jsonResponse.put("error", "unknown request");
+        if (!jsonRequest.keySet().contains(FIELD_MESSAGE)) {
+            jsonResponse.put(FIELD_STATUS, FIELD_ERROR);
+            jsonResponse.put(FIELD_ERROR, "unknown request");
             return jsonResponse;
         }
 
-        Object obj = jsonRequest.get("message");
+        Object obj = jsonRequest.get(FIELD_MESSAGE);
 
         String msg = (String) obj;
-        jsonResponse.put("status", "ok");
-        jsonResponse.put("hash", msg.hashCode());
+        jsonResponse.put(FIELD_STATUS, "ok");
+        jsonResponse.put(FIELD_HASH, msg.hashCode());
 
         try {
             logger.log(msg, false);
             logger.close();
         } catch (LoggerException ex) {
-            jsonResponse.put("status", "error");
-            jsonResponse.put("error", ex.toString());
+            jsonResponse.put(FIELD_STATUS, FIELD_ERROR);
+            jsonResponse.put(FIELD_ERROR, ex.toString());
             ex.printStackTrace();
         }
         return jsonResponse;

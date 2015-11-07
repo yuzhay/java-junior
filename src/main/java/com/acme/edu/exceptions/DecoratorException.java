@@ -8,7 +8,7 @@ import java.util.List;
  * Default DecoratorException
  */
 public class DecoratorException extends Exception {
-    private List<PrinterException> printerExceptions = new ArrayList<>();
+    private final List<PrinterException> printerExceptions = new ArrayList<>();
 
     /**
      * Decorates String message
