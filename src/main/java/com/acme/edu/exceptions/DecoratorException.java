@@ -5,9 +5,10 @@ import java.util.List;
 
 /**
  * Created by Yuriy on 05.11.2015.
+ * Default DecoratorException
  */
 public class DecoratorException extends Exception {
-    private final List<PrinterException> printerExceptions = new ArrayList<PrinterException>();
+    private List<PrinterException> printerExceptions = new ArrayList<>();
 
     /**
      * Decorates String message
@@ -28,7 +29,7 @@ public class DecoratorException extends Exception {
 
     /**
      * Getter for PrinterExceptionsList
-     * @return
+     * @return printer exceptions list
      */
     public List<PrinterException> getPrinterExceptionsList() {
         return printerExceptions;

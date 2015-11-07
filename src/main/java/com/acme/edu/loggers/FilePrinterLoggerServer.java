@@ -26,7 +26,6 @@ public class FilePrinterLoggerServer {
         @Override
         public void run() {
             while (serverThread == Thread.currentThread()) {
-                //noinspection TryWithIdenticalCatches
                 try (Socket client = socket.accept();
                      DataInputStream dis = new DataInputStream(client.getInputStream());
                      DataOutputStream dos = new DataOutputStream(client.getOutputStream())
@@ -36,13 +35,13 @@ public class FilePrinterLoggerServer {
                     dos.flush();
                 } catch (SocketTimeoutException ste) {
                     /*Do nothing. Time is out. Wait for next client*/
+                    ste.printStackTrace();
                 } catch (IOException e) {
-                    /*Todo: Ask how to handle this exception in the separate thread*/
+                    throw new RuntimeException("FilePrinterLoggerServer IOExceptions", e);
                 }
             }
             Thread.currentThread().interrupt();
         }
-
     }
 
     private Server serverRunner = new Server();
@@ -68,19 +67,18 @@ public class FilePrinterLoggerServer {
         }
     }
 
-
     /**
      * Starts FilePrinterLogger server.
      *
      * @throws LoggerException
      */
     public void start() throws LoggerException {
-        serverThread = new Thread(serverRunner);
-        serverThread.setUncaughtExceptionHandler(
-                (th, ex) -> {
-                    /*Use this handler to catch unhandled exceptions*/
-                });
-        serverThread.start();
+        try {
+            serverThread = new Thread(serverRunner);
+            serverThread.start();
+        } catch (RuntimeException ex) {
+            throw new LoggerException("Message ", ex);
+        }
     }
 
     /**
@@ -103,7 +101,6 @@ public class FilePrinterLoggerServer {
 
         Object obj = jsonRequest.get("message");
 
-        //Always is a String, because it is json
         String msg = (String) obj;
         jsonResponse.put("status", "ok");
         jsonResponse.put("hash", msg.hashCode());
@@ -114,6 +111,7 @@ public class FilePrinterLoggerServer {
         } catch (LoggerException ex) {
             jsonResponse.put("status", "error");
             jsonResponse.put("error", ex.toString());
+            ex.printStackTrace();
         }
         return jsonResponse;
     }
