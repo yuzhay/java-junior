@@ -10,14 +10,42 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 /**
  * Created by Yuriy on 06.11.2015.
+ * Network version of Printer class which is used in Logger class.
  */
 public class FilePrinterLoggerServer {
     //region private fields
     private ServerSocket socket;
     private Logger logger;
+    private Thread serverThread;
+
+    private class Server implements Runnable {
+        @Override
+        public void run() {
+            while (serverThread == Thread.currentThread()) {
+                //noinspection TryWithIdenticalCatches
+                try (Socket client = socket.accept();
+                     DataInputStream dis = new DataInputStream(client.getInputStream());
+                     DataOutputStream dos = new DataOutputStream(client.getOutputStream())
+                ) {
+                    JSONObject jsonResponse = getJsonResponse(dis.readUTF());
+                    dos.writeUTF(jsonResponse.toString());
+                    dos.flush();
+                } catch (SocketTimeoutException ste) {
+                    /*Do nothing. Time is out. Wait for next client*/
+                } catch (IOException e) {
+                    /*Todo: Ask how to handle this exception in the separate thread*/
+                }
+            }
+            Thread.currentThread().interrupt();
+        }
+
+    }
+
+    private Server serverRunner = new Server();
     //endregion
 
     /**
@@ -25,11 +53,13 @@ public class FilePrinterLoggerServer {
      *
      * @param port     Server will be waiting for clients on mentioned port
      * @param fileName Output log filename
+     * @param socketTimeout  timeout in milliseconds, used in socket.setSoTimeout()
      * @throws LoggerException
      */
-    public FilePrinterLoggerServer(int port, String fileName) throws LoggerException {
+    public FilePrinterLoggerServer(int port, String fileName, int socketTimeout) throws LoggerException {
         try {
             socket = new ServerSocket(port);
+            socket.setSoTimeout(socketTimeout);
             logger = new Logger(new FilePrinter(fileName));
         } catch (IOException e) {
             throw new LoggerException("Server couldn't start", e);
@@ -38,45 +68,43 @@ public class FilePrinterLoggerServer {
         }
     }
 
+
     /**
      * Starts FilePrinterLogger server.
      *
      * @throws LoggerException
      */
     public void start() throws LoggerException {
-        /*
-        todo: rewrite code using threads
-         */
-        Socket client;
-        DataInputStream dis;
-        try {
-            client = socket.accept();
-            dis = new DataInputStream(client.getInputStream());
-            String buffer = dis.readUTF();
-            JSONObject jsonResponse = getJsonResponse(buffer);
-            DataOutputStream dos = new DataOutputStream(client.getOutputStream());
-            dos.writeUTF(jsonResponse.toString());
-            dos.flush();
-        } catch (IOException e) {
-            throw new LoggerException("Server can't read from socket", e);
-        }
+        serverThread = new Thread(serverRunner);
+        serverThread.setUncaughtExceptionHandler(
+                (th, ex) -> {
+                    /*Use this handler to catch unhandled exceptions*/
+                });
+        serverThread.start();
+    }
+
+    /**
+     * Stop server thread
+     */
+    public void stop() {
+        serverThread = null;
     }
 
     //region private methods
-    private JSONObject getJsonResponse(String buffer) throws LoggerException {
+    private JSONObject getJsonResponse(String buffer) {
         JSONObject jsonRequest = new JSONObject(buffer);
+        JSONObject jsonResponse = new JSONObject();
 
         if (!jsonRequest.keySet().contains("message")) {
-            throw new LoggerException("Server incorrect json message");
+            jsonResponse.put("status", "error");
+            jsonResponse.put("error", "unknown request");
+            return jsonResponse;
         }
 
         Object obj = jsonRequest.get("message");
-        if (!(obj instanceof String)) {
-            throw new LoggerException("Unknown command");
-        }
 
+        //Always is a String, because it is json
         String msg = (String) obj;
-        JSONObject jsonResponse = new JSONObject();
         jsonResponse.put("status", "ok");
         jsonResponse.put("hash", msg.hashCode());
 
@@ -89,6 +117,5 @@ public class FilePrinterLoggerServer {
         }
         return jsonResponse;
     }
-
     //endregion
 }
