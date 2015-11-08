@@ -27,6 +27,7 @@ public class FilePrinterLoggerServer {
     private ServerSocket socket;
     private Logger logger;
     private Thread serverThread;
+    private boolean isRuning = false;
 
     private class Server implements Runnable {
         @Override
@@ -79,9 +80,14 @@ public class FilePrinterLoggerServer {
      * @throws LoggerException
      */
     public void start() throws LoggerException {
+        if (isRuning) {
+            return;
+        }
+
         try {
             serverThread = new Thread(serverRunner);
             serverThread.start();
+            isRuning = true;
         } catch (RuntimeException ex) {
             throw new LoggerException("Message ", ex);
         }
@@ -92,6 +98,16 @@ public class FilePrinterLoggerServer {
      */
     public void stop() {
         serverThread = null;
+        isRuning = false;
+    }
+
+    /**
+     * Check if the server is started
+     *
+     * @return if server is running then returns true, else false
+     */
+    public boolean isRunning() {
+        return this.isRuning;
     }
 
     //region private methods
