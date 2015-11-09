@@ -6,12 +6,11 @@ import com.acme.edu.exceptions.PrinterException;
 import com.acme.edu.printers.FilePrinter;
 import org.json.JSONObject;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.nio.charset.Charset;
 
 /**
  * Created by Yuriy on 06.11.2015.
@@ -24,6 +23,7 @@ public class FilePrinterLoggerServer {
     public static final String FIELD_ERROR = "error";
 
     //region private fields
+    private final Charset charset = Charset.forName("utf-8");
     private ServerSocket socket;
     private Logger logger;
     private Thread serverThread;
@@ -32,14 +32,22 @@ public class FilePrinterLoggerServer {
     private class Server implements Runnable {
         @Override
         public void run() {
+
             while (serverThread == Thread.currentThread()) {
                 try (Socket client = socket.accept();
-                     DataInputStream dis = new DataInputStream(client.getInputStream());
-                     DataOutputStream dos = new DataOutputStream(client.getOutputStream())
+                     BufferedReader br = new BufferedReader(
+                             new InputStreamReader(client.getInputStream(), charset));
+                     OutputStreamWriter osw = new OutputStreamWriter(client.getOutputStream(), charset)
                 ) {
-                    JSONObject jsonResponse = getJsonResponse(dis.readUTF());
-                    dos.writeUTF(jsonResponse.toString());
-                    dos.flush();
+                    String line;
+                    StringBuilder buffer = new StringBuilder();
+                    while ((line = br.readLine()) != null) {
+                        buffer.append(line);
+                    }
+
+                    JSONObject jsonResponse = getJsonResponse(buffer.toString());
+                    osw.write(jsonResponse.toString());
+                    osw.flush();
                 } catch (SocketTimeoutException ste) {
                     /*Do nothing. Time is out. Wait for next client*/
                     ste.printStackTrace();
@@ -57,9 +65,9 @@ public class FilePrinterLoggerServer {
     /**
      * Creates FilePrinterLoggerServer
      *
-     * @param port     Server will be waiting for clients on mentioned port
-     * @param fileName Output log filename
-     * @param socketTimeout  timeout in milliseconds, used in socket.setSoTimeout()
+     * @param port          Server will be waiting for clients on mentioned port
+     * @param fileName      Output log filename
+     * @param socketTimeout timeout in milliseconds, used in socket.setSoTimeout()
      * @throws LoggerException
      */
     public FilePrinterLoggerServer(int port, String fileName, int socketTimeout) throws LoggerException {

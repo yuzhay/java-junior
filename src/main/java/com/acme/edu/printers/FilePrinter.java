@@ -27,30 +27,32 @@ public class FilePrinter implements Printer {
 
     /**
      * Creates FilePrinter
-     * @param file  output file
+     *
+     * @param file    output file
      * @param charset encoding to use
      * @throws PrinterException
      */
     public FilePrinter(String file, Charset charset) throws PrinterException {
-        this.file = file;
+        this(file);
         this.charset = charset;
     }
 
     /**
      * Creates FilePrinter
-     * @param file  output file
+     *
+     * @param file    output file
      * @param charset encoding to use
      * @param bufSize max buffer message count
      * @throws PrinterException
      */
     public FilePrinter(String file, Charset charset, int bufSize) throws PrinterException {
-        this.file = file;
-        this.charset = charset;
+        this(file, charset);
         this.bufSize = bufSize;
     }
 
     /**
      * Logs message to output file
+     *
      * @param message print parameter
      * @throws PrinterException
      */
@@ -67,6 +69,7 @@ public class FilePrinter implements Printer {
 
     /**
      * Flushes buffer
+     *
      * @throws PrinterException
      */
     @Override

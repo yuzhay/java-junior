@@ -6,7 +6,9 @@ import org.json.JSONObject;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.nio.charset.Charset;
 
 /**
  * Created by Yuriy on 06.11.2015.
@@ -14,6 +16,7 @@ import java.net.Socket;
 public class NetPrinter implements Printer {
 
     //region private fields
+    private final Charset charset = Charset.forName("utf-8");
     private Socket client;
     private String host;
     private int port;
@@ -45,12 +48,13 @@ public class NetPrinter implements Printer {
 
         try (
                 OutputStream os = client.getOutputStream();
-                DataOutputStream das = new DataOutputStream(os)
+                OutputStreamWriter osw = new OutputStreamWriter(os, charset)
         ) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("message", message);
-            das.writeUTF(jsonObject.toString());
-            das.flush();
+
+            osw.write(jsonObject.toString());
+            osw.flush();
         } catch (IOException e) {
             throw new PrinterException("Data not sent", e);
         }
