@@ -2,8 +2,12 @@ package com.acme.edu.printers;
 
 import com.acme.edu.exceptions.PrinterException;
 
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Yuriy on 06.11.2015.
@@ -11,9 +15,8 @@ import java.nio.charset.Charset;
 public class FilePrinter implements Printer {
     private Charset charset = Charset.forName("utf-8");
     private String file;
-    private StringBuilder buffer = new StringBuilder();
     private int bufSize = 50;
-    private int counter = 0;
+    private List<String> bufferList = new ArrayList<>(bufSize);
 
     /**
      * Creates FilePrinter
@@ -48,6 +51,7 @@ public class FilePrinter implements Printer {
     public FilePrinter(String file, Charset charset, int bufSize) throws PrinterException {
         this(file, charset);
         this.bufSize = bufSize;
+        this.bufferList = new ArrayList<>(bufSize);
     }
 
     /**
@@ -58,12 +62,11 @@ public class FilePrinter implements Printer {
      */
     @Override
     public void log(String message) throws PrinterException {
-        buffer.append(message).append(System.lineSeparator());
-        counter++;
-        if (counter >= bufSize) {
-            writeToFile(buffer.toString());
-            buffer = new StringBuilder();
-            counter = 0;
+        bufferList.add(message);
+        if (bufferList.size() >= bufSize) {
+            sort();
+            writeToFile(joinBufferListToString());
+            bufferList.clear();
         }
     }
 
@@ -74,16 +77,33 @@ public class FilePrinter implements Printer {
      */
     @Override
     public void flush() throws PrinterException {
-        writeToFile(buffer.toString());
-        buffer = new StringBuilder();
+        sort();
+        writeToFile(joinBufferListToString());
+        bufferList.clear();
     }
 
+    private void sort() {
+        bufferList.sort((o1, o2) -> {
+            boolean o1ContainsError = o1.contains("ERROR");
+            if (o1ContainsError && o2.contains("ERROR")) {
+                return 0;
+            } else if (o1ContainsError) {
+                return -1;
+            } else {
+                return 1;
+            }
+        });
+    }
+
+    private String joinBufferListToString() {
+        return bufferList.stream().reduce((t, u) -> t + System.lineSeparator() + u).get();
+    }
 
     private void writeToFile(String message) throws PrinterException {
         try (
                 FileOutputStream fileOutputStream = new FileOutputStream(file, true);
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, charset)) {
-            outputStreamWriter.write(message);
+            outputStreamWriter.write(message + System.lineSeparator());
             outputStreamWriter.flush();
         } catch (IOException e) {
             throw new PrinterException("Can't write to file ", e);

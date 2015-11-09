@@ -77,6 +77,29 @@ public class LoggerClientServerTest {
     }
 
     @Test
+    public void shouldLoggerPrintPriorityToLogFile() throws PrinterException, LoggerException, IOException {
+        //region when
+        String message1 = "Low priority message";
+        String message2 = "ERROR: This magic high priority string";
+
+        String expected = "string: " + message2 + System.lineSeparator() +
+                "string: " + message1 + System.lineSeparator();
+
+        Logger sp = new Logger(
+                new FilePrinter(fileName, charset));
+        sp.log(message1);
+        sp.log(message2);
+
+        sp.close();
+        //endregion
+
+        //region then
+        String actual = FileUtils.readFileToString(file, charset);
+        assertEquals(expected, actual);
+        //endregion
+    }
+
+    @Test
     @Ignore
     /*ToDO: Fix required. Works fine, but not in sequence.*/
     public void shouldLogNetPrinter() throws LoggerException, IOException, InterruptedException {
