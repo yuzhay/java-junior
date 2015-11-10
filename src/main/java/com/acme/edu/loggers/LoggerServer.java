@@ -6,38 +6,59 @@ import com.acme.edu.exceptions.PrinterException;
 import com.acme.edu.printers.FilePrinter;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by Yuriy on 06.11.2015.
  * Network version of Printer class which is used in Logger class.
  */
-public class FilePrinterLoggerServer {
+public class LoggerServer {
+    //region public fields
     public static final String FIELD_MESSAGE = "message";
     public static final String FIELD_STATUS = "status";
     public static final String FIELD_HASH = "hash";
     public static final String FIELD_ERROR = "error";
+    //endregion
 
     //region private fields
     private final Charset charset = Charset.forName("utf-8");
     private ServerSocket socket;
     private Logger logger;
     private Thread serverThread;
-    private boolean isRuning = false;
+    private Accepter accepter = new Accepter();
 
-    private class Server implements Runnable {
-        @Override
-        public void run() {
+    //region Accepter
+    private class Accepter implements Runnable {
+        //region private fields
+        private List<IOException> exceptionsList = new ArrayList<>();
+        private ExecutorService pool = Executors.newFixedThreadPool(10);
 
-            while (serverThread == Thread.currentThread()) {
-                try (Socket client = socket.accept();
-                     BufferedReader br = new BufferedReader(
-                             new InputStreamReader(client.getInputStream(), charset));
-                     OutputStreamWriter osw = new OutputStreamWriter(client.getOutputStream(), charset)
+        private class Worker implements Runnable {
+            private Socket client;
+
+            public Worker(Socket client) {
+                this.client = client;
+            }
+
+            @Override
+            public void run() {
+                try (
+                        BufferedReader br = new BufferedReader(
+                                new InputStreamReader(client.getInputStream(), charset));
+                        OutputStreamWriter osw = new OutputStreamWriter(client.getOutputStream(), charset)
                 ) {
                     String line;
                     StringBuilder buffer = new StringBuilder();
@@ -48,39 +69,66 @@ public class FilePrinterLoggerServer {
                     JSONObject jsonResponse = getJsonResponse(buffer.toString());
                     osw.write(jsonResponse.toString());
                     osw.flush();
-                } catch (SocketTimeoutException ste) {
-                    /*Do nothing. Time is out. Wait for next client*/
-                    ste.printStackTrace();
                 } catch (IOException e) {
-                    throw new FilePrinterLoggerServerException("FilePrinterLoggerServer IOExceptions", e);
+                    exceptionsList.add(e);
+                    e.printStackTrace();
                 }
             }
-            Thread.currentThread().interrupt();
         }
-    }
+        //endregion
 
-    private Server serverRunner = new Server();
+        //region public methods
+        public Accepter() {
+
+        }
+
+        public List<IOException> getExceptions() {
+            return exceptionsList;
+        }
+
+        @Override
+        public void run() {
+            while (!Thread.interrupted()) {
+                try {
+                    Socket client = socket.accept();
+                    pool.execute(new Worker(client));
+                } catch (SocketTimeoutException ste) {
+                    /*Do nothing. Time is out. Wait for next client*/
+                } catch (IOException e) {
+                    exceptionsList.add(e);
+                }
+            }
+        }
+
+        //endregion
+    }
     //endregion
+    //endregion
+
+    //region constructor
 
     /**
      * Creates FilePrinterLoggerServer
      *
-     * @param port          Server will be waiting for clients on mentioned port
+     * @param port          Accepter will be waiting for clients on mentioned port
      * @param fileName      Output log filename
      * @param socketTimeout timeout in milliseconds, used in socket.setSoTimeout()
      * @throws LoggerException
      */
-    public FilePrinterLoggerServer(int port, String fileName, int socketTimeout) throws LoggerException {
+    public LoggerServer(int port, String fileName, int socketTimeout) throws LoggerException {
         try {
             socket = new ServerSocket(port);
             socket.setSoTimeout(socketTimeout);
             logger = new Logger(new FilePrinter(fileName));
         } catch (IOException e) {
-            throw new LoggerException("Server couldn't start", e);
+            throw new LoggerException("Accepter couldn't start", e);
         } catch (PrinterException e) {
             throw new LoggerException("Can't create server logger", e);
         }
     }
+    //endregion
+
+    //region public methods
 
     /**
      * Starts FilePrinterLogger server.
@@ -88,14 +136,9 @@ public class FilePrinterLoggerServer {
      * @throws LoggerException
      */
     public void start() throws LoggerException {
-        if (isRuning) {
-            return;
-        }
-
         try {
-            serverThread = new Thread(serverRunner);
+            serverThread = new Thread(accepter);
             serverThread.start();
-            isRuning = true;
         } catch (RuntimeException ex) {
             throw new LoggerException("Message ", ex);
         }
@@ -105,8 +148,7 @@ public class FilePrinterLoggerServer {
      * Stop server thread
      */
     public void stop() {
-        serverThread = null;
-        isRuning = false;
+        serverThread.interrupt();
     }
 
     /**
@@ -115,8 +157,9 @@ public class FilePrinterLoggerServer {
      * @return if server is running then returns true, else false
      */
     public boolean isRunning() {
-        return this.isRuning;
+        return serverThread.isInterrupted();
     }
+    //endregion
 
     //region private methods
     private JSONObject getJsonResponse(String buffer) {

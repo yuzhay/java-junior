@@ -1,9 +1,9 @@
 package com.acme.edu.iteration04;
 
-import com.acme.edu.loggers.FilePrinterLoggerServer;
 import com.acme.edu.loggers.Logger;
 import com.acme.edu.exceptions.LoggerException;
 import com.acme.edu.exceptions.PrinterException;
+import com.acme.edu.loggers.LoggerServer;
 import com.acme.edu.printers.FilePrinter;
 import com.acme.edu.printers.NetPrinter;
 import org.apache.commons.io.FileUtils;
@@ -29,12 +29,12 @@ public class LoggerClientServerTest {
     private final Charset charset = Charset.forName("utf-8");
     private final int serverTimeout = 1000;
     private int port = 32350;
-    private FilePrinterLoggerServer server;
+    private LoggerServer server;
 
     //region given
     @Before
     public void setUpSystemOut() throws IOException, LoggerException, InterruptedException {
-        server = new FilePrinterLoggerServer(port, fileName, serverTimeout);
+        server = new LoggerServer(port, fileName, serverTimeout);
         server.start();
         if (file.exists()) {
             //noinspection ResultOfMethodCallIgnored
@@ -113,7 +113,7 @@ public class LoggerClientServerTest {
 
         //region then
         //Wait until file will be created
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         String actual = FileUtils.readFileToString(file, charset);
         assertEquals(expected, actual);
         //endregion
