@@ -8,7 +8,7 @@ import com.acme.edu.printers.Printer;
  * Created by Yuriy on 06.11.2015.
  */
 public abstract class DependencyInjectionDecoratorCommand implements DecoratorCommand {
-    private final String message = "Some of printers are not available";
+    private static final String message = "Some of printers are not available";
     protected Printer[] printers;
 
     /**

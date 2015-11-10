@@ -2,7 +2,6 @@ package com.acme.edu.decorators;
 
 import com.acme.edu.printers.Printer;
 import com.acme.edu.exceptions.DecoratorException;
-import com.acme.edu.exceptions.PrinterException;
 
 /**
  * PostfixDecoratorCommand prints string with specified prefix

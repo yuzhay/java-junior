@@ -1,6 +1,5 @@
 package com.acme.edu.loggers;
 
-import com.acme.edu.exceptions.FilePrinterLoggerServerException;
 import com.acme.edu.exceptions.LoggerException;
 import com.acme.edu.exceptions.PrinterException;
 import com.acme.edu.printers.FilePrinter;
@@ -15,9 +14,7 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

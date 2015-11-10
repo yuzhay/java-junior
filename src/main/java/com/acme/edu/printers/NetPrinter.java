@@ -2,8 +2,6 @@ package com.acme.edu.printers;
 
 import com.acme.edu.exceptions.PrinterException;
 import org.json.JSONObject;
-
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -35,6 +33,7 @@ public class NetPrinter implements Printer {
 
     /**
      * Sends log message to remote server
+     *
      * @param message print parameter
      * @throws PrinterException
      */
@@ -62,6 +61,7 @@ public class NetPrinter implements Printer {
 
     /**
      * Flushes buffer
+     *
      * @throws PrinterException
      */
     @Override
