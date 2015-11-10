@@ -15,6 +15,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
@@ -30,10 +31,12 @@ public class LoggerClientServerTest {
     private final int serverTimeout = 1000;
     private int port = 32350;
     private LoggerServer server;
+    private Random portRnd = new Random();
 
     //region given
     @Before
     public void setUpSystemOut() throws IOException, LoggerException, InterruptedException {
+        port = portRnd.nextInt(64000) + 1024;
         server = new LoggerServer(port, fileName, serverTimeout);
         server.start();
         if (file.exists()) {
@@ -100,8 +103,6 @@ public class LoggerClientServerTest {
     }
 
     @Test
-    @Ignore
-    /*ToDO: Fix required. Works fine, but not in sequence.*/
     public void shouldLogNetPrinter() throws LoggerException, IOException, InterruptedException {
         //region when
         String expected = "primitive: 8" + System.lineSeparator();
@@ -120,8 +121,6 @@ public class LoggerClientServerTest {
     }
 
     @Test(expected = LoggerException.class)
-    @Ignore
-    /*ToDO: Fix required. Works fine, but not in sequence.*/
     public void shouldThrowLoggerException() throws LoggerException, IOException {
         Logger logger = new Logger(new NetPrinter(host + "error in host", port));
         logger.log((String) null);

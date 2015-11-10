@@ -78,10 +78,12 @@ public class LoggerServer {
         //endregion
 
         //region public methods
-        public Accepter() {
 
-        }
-
+        /**
+         * Get exception list of acception and worker
+         *
+         * @return list of exception
+         */
         public List<IOException> getExceptions() {
             return exceptionsList;
         }
@@ -98,6 +100,8 @@ public class LoggerServer {
                     exceptionsList.add(e);
                 }
             }
+            /*TODO: Make kindly shutdown*/
+            pool.shutdownNow();
         }
 
         //endregion
